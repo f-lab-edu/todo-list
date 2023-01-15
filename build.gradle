@@ -2,6 +2,21 @@ plugins {
 	id 'java'
 	id 'org.springframework.boot' version '2.7.7'
 	id 'io.spring.dependency-management' version '1.0.15.RELEASE'
+  id 'checkstyle'
+}
+
+checkstyle {
+  ignoreFailures = false // 분석결과 예외가 발생하면 빌드실패 발생시키는 것을 제외
+  // configFile = file("config/checkstyle/checkstyle.xml") // 1.1.2 에서 작성한 checkstyle 파일 지정
+  configFile = rootProject.file("${rootDir}/config/checkstyle/checkstyle.xml")
+  reportsDir = file("${buildDir}/checkstyle-output") // 리포트 파일이 위치할 디렉토리 지정
+  toolVersion = '10.6.0'
+}
+
+checkstyleMain {
+  reports {
+    xml.destination = file("${checkstyle.reportsDir}/checkstyle-report.xml") // 리포트 파일의 위치 및 파일명 지정
+  }
 }
 
 group = 'com.flab'
