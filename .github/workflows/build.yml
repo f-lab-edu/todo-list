@@ -9,6 +9,8 @@ name: Java CI with Gradle
 on:
   pull_request:
     branches: [ "main", "dev" ]
+    path:
+      - 'todo-list/src/**'
 
 permissions:
   contents: read
