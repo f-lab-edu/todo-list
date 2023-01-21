@@ -21,10 +21,10 @@ jobs:
 
     steps:
       - name: Setting Checkout
-      - uses: actions/checkout@v3
+        uses: actions/checkout@v3
 
       - name: Checkstyle
-      - uses: dbelyaev/action-checkstyle@v0.5.1
+        uses: dbelyaev/action-checkstyle@v0.5.1
         with:
           checkstyle_config: ${{ github.workspace }}/config/checkstyle/naver-checkstyle-rules.xml
           github_token: ${{ secrets.github_token }}
