@@ -55,7 +55,7 @@ jacocoTestReport {
     reports {
         html.enabled true
         csv.enabled true
-        xml.enabled false
+        xml.enabled true
     }
     afterEvaluate {
         classDirectories.setFrom(files(classDirectories.files.collect {
