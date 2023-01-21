@@ -10,7 +10,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-class HealthControllerTest{
+class HealthControllerTest {
 
 	@Autowired
 	TestRestTemplate testRestTemplate;
@@ -27,7 +27,7 @@ class HealthControllerTest{
 			);
 
 		//Then
-		assertEquals(HttpStatus.OK,response.getStatusCode());
-		assertEquals("pong",response.getBody());
+		assertEquals(HttpStatus.OK, response.getStatusCode());
+		assertEquals("pong", response.getBody());
 	}
 }
