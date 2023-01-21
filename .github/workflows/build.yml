@@ -12,9 +12,6 @@ on:
     paths:
       - 'todo-list/src/**'
 
-permissions:
-  contents: read
-
 jobs:
   checkstyle:
     permissions: write-all
@@ -34,6 +31,8 @@ jobs:
           level: warning
 
   build:
+    permissions: read
+
     runs-on: ubuntu-latest
 
     steps:
