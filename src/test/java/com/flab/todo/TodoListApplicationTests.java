@@ -8,6 +8,9 @@ class TodoListApplicationTests {
 
 	@Test
 	void contextLoads() {
+		//Given
+		//When
+		//Then
 	}
 
 }
