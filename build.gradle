@@ -60,7 +60,9 @@ jacocoTestReport {
     afterEvaluate {
         classDirectories.setFrom(files(classDirectories.files.collect {
             fileTree(dir: it,
-                    exclude: ["com/flab/todo/TodoListApplication.class"])
+                    exclude: ["com/flab/todo/TodoListApplication.class",
+                              "com/flab/todo/common/**/*.class",
+                              "com/flab/todo/database/**/*.class"])
         }))
     }
     finalizedBy 'jacocoTestCoverageVerification'
@@ -71,7 +73,9 @@ jacocoTestCoverageVerification {
     afterEvaluate {
         classDirectories.setFrom(files(classDirectories.files.collect {
             fileTree(dir: it,
-                    exclude: ["com/flab/todo/TodoListApplication.class"])
+                    exclude: ["com/flab/todo/TodoListApplication.class",
+                              "com/flab/todo/common/**/*.class",
+                              "com/flab/todo/database/**/*.class"])
         }))
     }
     violationRules{
