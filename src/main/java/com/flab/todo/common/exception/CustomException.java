@@ -1,6 +1,6 @@
 package com.flab.todo.common.exception;
 
-public class CustomException extends RuntimeException{
+public class CustomException extends RuntimeException {
 
 	private final ErrorCode errorCode;
 
@@ -9,7 +9,7 @@ public class CustomException extends RuntimeException{
 		this.errorCode = errorCode;
 	}
 
-	public ErrorCode getErrorCode(){
+	public ErrorCode getErrorCode() {
 		return this.errorCode;
 	}
 }

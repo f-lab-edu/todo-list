@@ -29,7 +29,7 @@ class TodoControllerTest {
 	private MockMvc mockMvc;
 
 	@BeforeEach()
-	void settingTest(){
+	void settingTest() {
 		this.mockMvc = MockMvcBuilders
 			.standaloneSetup(todoController)
 			.setControllerAdvice(ExceptionHandlers.class)

@@ -27,12 +27,12 @@ public class TodoController {
 	}
 
 	@GetMapping()
-	public ResponseEntity<List<RequestTodoListDto>> getTodoList(HttpServletRequest request){
+	public ResponseEntity<List<RequestTodoListDto>> getTodoList(HttpServletRequest request) {
 		HttpSession session = request.getSession(false);
 
-		if(session == null)
+		if (session == null) {
 			throw new CustomException(REQUIRED_LOGIN_ERROR);
-
+		}
 		Long userId = (Long)session.getAttribute("user");
 
 		return new ResponseEntity<>(this.todoService.getTodoList(userId), HttpStatus.OK);

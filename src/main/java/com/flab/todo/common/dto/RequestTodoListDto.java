@@ -15,12 +15,14 @@ public class RequestTodoListDto {
 	}
 
 	@Override
-	public boolean equals(Object o) {
-		if (this == o)
+	public boolean equals(Object object) {
+		if (this == object) {
 			return true;
-		if (o == null || getClass() != o.getClass())
+		}
+		if (object == null || getClass() != object.getClass()) {
 			return false;
-		RequestTodoListDto that = (RequestTodoListDto)o;
+		}
+		RequestTodoListDto that = (RequestTodoListDto)object;
 		return Objects.equals(value, that.value) && Objects.equals(isDone, that.isDone);
 	}
 

@@ -21,7 +21,7 @@ public class Todo {
 		this.isDone = isDone;
 	}
 
-	public RequestTodoListDto toRequestTodoListDto(){
+	public RequestTodoListDto toRequestTodoListDto() {
 		return new RequestTodoListDto(this.things, this.isDone);
 	}
 }

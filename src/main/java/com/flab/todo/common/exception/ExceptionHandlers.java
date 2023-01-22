@@ -11,8 +11,8 @@ import com.sun.tools.jconsole.JConsoleContext;
 public class ExceptionHandlers {
 
 	@ExceptionHandler(CustomException.class)
-	public ResponseEntity<RestApiException> handleCustomException(CustomException e){
-		RestApiException restApiException = RestApiException.of(e.getErrorCode());
+	public ResponseEntity<RestApiException> handleCustomException(CustomException ex) {
+		RestApiException restApiException = RestApiException.of(ex.getErrorCode());
 		return new ResponseEntity<>(restApiException, restApiException.getStatusCode());
 	}
 

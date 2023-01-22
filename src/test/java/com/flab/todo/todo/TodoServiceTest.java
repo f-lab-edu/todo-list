@@ -1,7 +1,7 @@
 package com.flab.todo.todo;
 
-import static org.hamcrest.MatcherAssert.*;
 import static org.hamcrest.CoreMatchers.*;
+import static org.hamcrest.MatcherAssert.*;
 import static org.mockito.Mockito.*;
 
 import java.util.List;
@@ -36,6 +36,9 @@ class TodoServiceTest {
 		List<RequestTodoListDto> requestTodoListDtoList = todoService.getTodoList(1L);
 
 		// Then
-		assertThat(requestTodoListDtoList, equalTo(result.stream().map(x -> x.toRequestTodoListDto()).collect(Collectors.toList())));
+		assertThat(requestTodoListDtoList,
+			equalTo(result.stream()
+				.map(x -> x.toRequestTodoListDto())
+				.collect(Collectors.toList())));
 	}
 }

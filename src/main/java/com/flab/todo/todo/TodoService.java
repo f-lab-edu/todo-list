@@ -16,7 +16,7 @@ public class TodoService {
 		this.todoRepository = todoRepository;
 	}
 
-	public List<RequestTodoListDto> getTodoList(Long userId){
+	public List<RequestTodoListDto> getTodoList(Long userId) {
 		return this.todoRepository.findByUserId(userId).stream()
 			.map(x -> x.toRequestTodoListDto())
 			.collect(Collectors.toList());

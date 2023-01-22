@@ -20,13 +20,13 @@ public class RestApiException {
 		this.statusCode = HttpStatus.valueOf(statusCode);
 	}
 
-	public RestApiException(ErrorCode errorCode){
+	public RestApiException(ErrorCode errorCode) {
 		this.msg = errorCode.getMessage();
 		this.code = errorCode.getCode();
 		this.statusCode = HttpStatus.valueOf(errorCode.getStatus());
 	}
 
-	public static RestApiException of(ErrorCode errorCode){
+	public static RestApiException of(ErrorCode errorCode) {
 		return new RestApiException(errorCode);
 	}
 }
