@@ -17,7 +17,7 @@ public class ErrorResponse {
 		this.error = error;
 	}
 
-	public static ResponseEntity from(HttpStatus httpStatus, Exception ex){
+	public static ResponseEntity from(HttpStatus httpStatus, Exception ex) {
 		ErrorResponse errorResponse = new ErrorResponse(httpStatus.value(), httpStatus.name(), ex.getMessage());
 
 		return ResponseEntity
