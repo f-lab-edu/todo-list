@@ -6,13 +6,22 @@ import org.springframework.http.ResponseEntity;
 import lombok.Getter;
 
 @Getter
-public enum ErrorResponse {
+public class ErrorResponse {
+	private int status;
+	private String message;
+	private String error;
 
-	REQUIRED_LOGIN_ERROR(HttpStatus.BAD_REQUEST, "로그인이 필요합니다.");
-
-	private ResponseEntity responseEntity;
-
-	ErrorResponse(HttpStatus status, String message) {
-		this.responseEntity = new ResponseEntity(message, status);
+	public ErrorResponse(int status, String message, String error) {
+		this.status = status;
+		this.message = message;
+		this.error = error;
 	}
-};
+
+	public static ResponseEntity from(HttpStatus httpStatus, Exception ex) {
+		ErrorResponse errorResponse = new ErrorResponse(httpStatus.value(), httpStatus.name(), ex.getMessage());
+
+		return ResponseEntity
+			.status(HttpStatus.BAD_REQUEST)
+			.body(errorResponse);
+	}
+}
