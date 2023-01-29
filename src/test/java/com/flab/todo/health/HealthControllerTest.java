@@ -14,6 +14,7 @@ class HealthControllerTest {
 
 	@Autowired
 	TestRestTemplate testRestTemplate;
+
 	@Test
 	void pong() {
 		// Given
