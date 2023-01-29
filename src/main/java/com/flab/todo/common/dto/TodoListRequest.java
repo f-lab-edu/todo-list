@@ -2,7 +2,7 @@ package com.flab.todo.common.dto;
 
 import java.util.Objects;
 
-import com.flab.todo.database.model.Todo;
+import com.flab.todo.database.entity.Todo;
 
 import lombok.Getter;
 

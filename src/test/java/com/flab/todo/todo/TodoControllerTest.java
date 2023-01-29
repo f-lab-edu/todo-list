@@ -13,7 +13,7 @@ import org.mockito.Mockito;
 import org.springframework.http.ResponseEntity;
 
 import com.flab.todo.common.dto.TodoListRequest;
-import com.flab.todo.database.model.Todo;
+import com.flab.todo.database.entity.Todo;
 
 class TodoControllerTest {
 

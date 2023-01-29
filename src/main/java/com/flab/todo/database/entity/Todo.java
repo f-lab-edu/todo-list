@@ -1,4 +1,4 @@
-package com.flab.todo.database.model;
+package com.flab.todo.database.entity;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
