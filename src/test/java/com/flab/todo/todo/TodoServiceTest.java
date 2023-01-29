@@ -14,7 +14,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import com.flab.todo.common.dto.RequestTodoListDto;
+import com.flab.todo.common.dto.TodoListRequest;
 import com.flab.todo.database.model.Todo;
 
 @ExtendWith(MockitoExtension.class)
@@ -29,16 +29,16 @@ class TodoServiceTest {
 	@DisplayName("1. Todo List를 성공적으로 반환")
 	void getTodoList() {
 		// Given
-		List<Todo> result = List.of( new Todo(1L, "아침 일찍 일어나기", false), new Todo(1L, "저녁에 일찍 자기", false) );
+		List<Todo> result = List.of( new Todo(1L, 1L, "아침 일찍 일어나기", false), new Todo(1L, 1L, "저녁에 일찍 자기", false) );
 		when(todoRepository.findByUserId(1L)).thenReturn(result);
 
 		// When
-		List<RequestTodoListDto> requestTodoListDtoList = todoService.getTodoList(1L);
+		List<TodoListRequest> requestTodoListDtoList = todoService.getTodoList(1L);
 
 		// Then
 		assertThat(requestTodoListDtoList,
 			equalTo(result.stream()
-				.map(x -> x.toRequestTodoListDto())
+				.map(TodoListRequest::from)
 				.collect(Collectors.toList())));
 	}
 }

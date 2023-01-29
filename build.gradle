@@ -40,6 +40,7 @@ dependencies {
 	runtimeOnly 'com.h2database:h2'
 	annotationProcessor 'org.projectlombok:lombok'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    implementation group: 'org.springframework', name: 'spring-aspects', version: '3.2.4.RELEASE'
 }
 
 tasks.named('test') {

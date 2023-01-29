@@ -5,7 +5,7 @@ import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
 
-import com.flab.todo.common.dto.RequestTodoListDto;
+import com.flab.todo.common.dto.TodoListRequest;
 
 @Service
 public class TodoService {
@@ -16,9 +16,9 @@ public class TodoService {
 		this.todoRepository = todoRepository;
 	}
 
-	public List<RequestTodoListDto> getTodoList(Long userId) {
+	public List<TodoListRequest> getTodoList(Long userId) {
 		return this.todoRepository.findByUserId(userId).stream()
-			.map(x -> x.toRequestTodoListDto())
+			.map(TodoListRequest::from)
 			.collect(Collectors.toList());
 	}
 }

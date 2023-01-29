@@ -2,16 +2,22 @@ package com.flab.todo.common.dto;
 
 import java.util.Objects;
 
+import com.flab.todo.database.model.Todo;
+
 import lombok.Getter;
 
 @Getter
-public class RequestTodoListDto {
+public class TodoListRequest {
 	private String value;
 	private Boolean isDone;
 
-	public RequestTodoListDto(String value, Boolean isDone) {
+	public TodoListRequest(String value, Boolean isDone) {
 		this.value = value;
 		this.isDone = isDone;
+	}
+
+	public static TodoListRequest from(Todo todo) {
+		return new TodoListRequest(todo.getThings(), todo.getIsDone());
 	}
 
 	@Override
@@ -22,7 +28,7 @@ public class RequestTodoListDto {
 		if (object == null || getClass() != object.getClass()) {
 			return false;
 		}
-		RequestTodoListDto that = (RequestTodoListDto)object;
+		TodoListRequest that = (TodoListRequest)object;
 		return Objects.equals(value, that.value) && Objects.equals(isDone, that.isDone);
 	}
 
