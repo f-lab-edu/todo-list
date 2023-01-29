@@ -1,4 +1,4 @@
-package com.flab.todo.user;
+package com.flab.todo.mail;
 
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -10,7 +10,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @RestController
 @RequiredArgsConstructor
-public class EmailController {
+public class MailController {
 
 	private final MailService mailService;
 

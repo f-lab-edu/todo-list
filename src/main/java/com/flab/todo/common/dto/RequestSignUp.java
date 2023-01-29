@@ -7,7 +7,7 @@ import javax.validation.constraints.NotNull;
 
 import org.hibernate.validator.constraints.Length;
 
-import com.flab.todo.user.Member;
+import com.flab.todo.database.entity.Member;
 
 import lombok.Data;
 

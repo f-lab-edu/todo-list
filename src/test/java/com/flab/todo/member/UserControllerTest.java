@@ -1,4 +1,4 @@
-package com.flab.todo.user;
+package com.flab.todo.member;
 
 import org.junit.Test;
 import org.mockito.InjectMocks;

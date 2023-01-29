@@ -1,4 +1,4 @@
-package com.flab.todo.user;
+package com.flab.todo.member;
 
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;

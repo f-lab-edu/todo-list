@@ -1,4 +1,4 @@
-package com.flab.todo.user;
+package com.flab.todo.mail;
 
 import java.io.UnsupportedEncodingException;
 import java.util.Random;
