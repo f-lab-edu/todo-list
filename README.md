@@ -38,11 +38,11 @@ main
 dev
 새로운 기능 배포 준비를 위한 개발 브랜치
 
-feature/#1
+feature/#1-이슈-제목
 기능 추가를 위한 브랜치, 이슈 넘버를 기입하여 구분
 
-bugfix/#1
-hotfix/#1
+bugfix/#1-이슈-제목
+hotfix/#1-이슈-제목
 이슈 해결을 위한 브랜치, 이슈 넘버를 기입하여 구분
 
 #Contribute method
