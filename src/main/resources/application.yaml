@@ -2,7 +2,7 @@
 mybatis:
   configuration:
     map-underscore-to-camel-case: true
-  type-aliases-package: com.flab.todo.database.model
+  type-aliases-package: com.flab.todo.database.entity
   mapper-locations: mybatis-mapper/*.xml
 
 # H2 DB 설정

@@ -24,6 +24,7 @@ public class SecurityConfig {
 			.sessionCreationPolicy(SessionCreationPolicy.ALWAYS); // 항상 HttpSesion 을 만든다.
 
 		http
+			.csrf().disable()
 			.formLogin().disable();
 		return http.build();
 	}

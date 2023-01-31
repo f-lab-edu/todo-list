@@ -7,6 +7,7 @@ import javax.validation.constraints.NotNull;
 
 import org.hibernate.validator.constraints.Length;
 
+import com.flab.todo.common.validator.MatchPassword;
 import com.flab.todo.database.entity.Member;
 
 import lombok.Data;
@@ -25,7 +26,7 @@ public class RequestSignUp {
 	@Length(min = 4, max = 16, message = "비밀번호는 4자 이상, 16자 이하로 입력해주세요.")
 	private String password;
 
-	@NotNull(message = "비밀번호를 옳바르게 입력해주세요.")
+	@MatchPassword
 	private String passwordConfirm;
 
 	public RequestSignUp(String email, String name, String password, String passwordConfirm) {

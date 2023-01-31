@@ -7,5 +7,7 @@ import com.flab.todo.database.entity.Member;
 @Mapper
 public interface MemberMapper {
 
-	Member insert(Member req);
+	void save(Member member);
+
+	Member findByEmail(String email);
 }
