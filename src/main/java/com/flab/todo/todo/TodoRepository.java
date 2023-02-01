@@ -6,4 +6,6 @@ import com.flab.todo.database.entity.Todo;
 
 public interface TodoRepository {
 	List<Todo> findByUserId(Long userId);
+
+	Todo save(Todo todo);
 }

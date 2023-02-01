@@ -7,17 +7,17 @@ import com.flab.todo.database.entity.Todo;
 import lombok.Getter;
 
 @Getter
-public class TodoListRequest {
+public class TodoListResponse {
 	private String value;
 	private Boolean isDone;
 
-	public TodoListRequest(String value, Boolean isDone) {
+	public TodoListResponse(String value, Boolean isDone) {
 		this.value = value;
 		this.isDone = isDone;
 	}
 
-	public static TodoListRequest from(Todo todo) {
-		return new TodoListRequest(todo.getThings(), todo.getIsDone());
+	public static TodoListResponse from(Todo todo) {
+		return new TodoListResponse(todo.getThings(), todo.getIsDone());
 	}
 
 	@Override
@@ -28,7 +28,7 @@ public class TodoListRequest {
 		if (object == null || getClass() != object.getClass()) {
 			return false;
 		}
-		TodoListRequest that = (TodoListRequest)object;
+		TodoListResponse that = (TodoListResponse)object;
 		return Objects.equals(value, that.value) && Objects.equals(isDone, that.isDone);
 	}
 

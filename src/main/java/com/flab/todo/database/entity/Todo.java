@@ -14,4 +14,14 @@ public class Todo {
 	private Long userId;
 	private String things;
 	private Boolean isDone;
+
+	@Override
+	public String toString() {
+		return "Todo{" +
+			"id=" + id +
+			", userId=" + userId +
+			", things='" + things + '\'' +
+			", isDone=" + isDone +
+			'}';
+	}
 }

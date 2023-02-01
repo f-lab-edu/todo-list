@@ -8,4 +8,8 @@
     <select id="findByUserId" resultType="Todo">
         select * from todo where user_id = #{id}
     </select>
+
+    <select id="save">
+        insert into todo (user_id, things, is_done) values (#{userId}, #{things}, #{isDone})
+    </select>
 </mapper>
