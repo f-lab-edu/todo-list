@@ -25,6 +25,8 @@ public class SecurityConfig {
 
 		http
 			.csrf().disable()
+			.headers().frameOptions().disable()
+			.and()
 			.formLogin().disable();
 		return http.build();
 	}
