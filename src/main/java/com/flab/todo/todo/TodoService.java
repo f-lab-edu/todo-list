@@ -3,6 +3,7 @@ package com.flab.todo.todo;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import com.flab.todo.common.dto.UpdateTodoRequest;
 import com.flab.todo.database.entity.Todo;
 
 import org.springframework.stereotype.Service;
@@ -26,10 +27,18 @@ public class TodoService {
 	}
 
 	public void save(SaveTodoRequest saveTodoRequest, Long userId) {
-
-		System.out.println(saveTodoRequest);
 		Todo todo = saveTodoRequest.toModel(userId);
-		System.out.println(todo);
 		this.todoRepository.save(todo);
+	}
+
+
+	public void update(UpdateTodoRequest updateTodoRequest, Long todoId, Long userId) {
+		Todo todo = updateTodoRequest.toModel(userId);
+		this.todoRepository.update(todo);
+	}
+
+
+	public void delete(Long todoId, Long userId) {
+		this.todoRepository.delete(todoId);
 	}
 }

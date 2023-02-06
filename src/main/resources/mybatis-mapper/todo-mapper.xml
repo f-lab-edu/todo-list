@@ -9,7 +9,15 @@
         select * from todo where user_id = #{id}
     </select>
 
-    <select id="save">
+    <insert id="save">
         insert into todo (user_id, things, is_done) values (#{userId}, #{things}, #{isDone})
-    </select>
+    </insert>
+
+    <update id="update">
+        update todo SET user_id =#{userId}, things = #{things}, is_done = #{isDone} where id = #{id}
+    </update>
+
+    <delete id="delete" parameterType="String">
+        delete FROM todo where id = #{todoId} where user_id = #{userId}
+    </delete>
 </mapper>

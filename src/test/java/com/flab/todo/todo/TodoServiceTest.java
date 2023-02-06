@@ -11,7 +11,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
-import com.flab.todo.common.dto.TodoListRequest;
+import com.flab.todo.common.dto.TodoListResponse;
 import com.flab.todo.database.entity.Todo;
 
 class TodoServiceTest {
@@ -27,10 +27,10 @@ class TodoServiceTest {
 		given(todoRepository.findByUserId(1L)).willReturn(result);
 
 		// When
-		List<TodoListRequest> requestTodoListDtoList = todoService.getTodoList(1L);
+		List<TodoListResponse> requestTodoListDtoList = todoService.getTodoList(1L);
 
 		// Then
 		assertThat(requestTodoListDtoList,
-			equalTo(result.stream().map(TodoListRequest::from).collect(Collectors.toList())));
+			equalTo(result.stream().map(TodoListResponse::from).collect(Collectors.toList())));
 	}
 }
