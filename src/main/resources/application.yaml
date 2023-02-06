@@ -1,3 +1,11 @@
+# mybatis 관련 설정
+mybatis:
+  configuration:
+    map-underscore-to-camel-case: true
+  type-aliases-package: com.flab.todo.database.entity
+  mapper-locations: mybatis-mapper/*.xml
+
+# H2 DB 설정
 spring:
   h2:
     console:
@@ -9,8 +17,15 @@ spring:
     driverClassName: org.h2.Driver
     password: ''
 
-mybatis:
-  configuration:
-    map-underscore-to-camel-case: true
-  type-aliases-package: com.flab.todo.database.entity
-  mapper-locations: mybatis-mapper/*.xml
+  # email 관련 (Gmail)
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: 'cjyeon1022@gmail.com'
+    password: 'pmoyulxnzyzdeysj'
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true

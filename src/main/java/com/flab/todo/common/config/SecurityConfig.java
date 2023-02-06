@@ -31,6 +31,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 			.sessionCreationPolicy(SessionCreationPolicy.ALWAYS); // 항상 HttpSesion 을 만든다.
 
 		http
+			.csrf().disable()
+			.headers().frameOptions().disable()
+			.and()
 			.formLogin().disable();
 		return http.build();
 	}
