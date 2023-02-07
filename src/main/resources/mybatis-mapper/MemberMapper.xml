@@ -1,17 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
 <mapper namespace="com.flab.todo.member.MemberMapper">
 
-    <insert id="save" useGeneratedKeys="true" keyProperty="id">
+    <!-- insert -->
+    <insert id="save" parameterType="Member" useGeneratedKeys="true" keyProperty="id">
         insert into member (email, name, password)
         values (#{email}, #{name}, #{password})
     </insert>
 
-    <select id="findByEmail" resultType="Member">
-        SELECT *
-        FROM member
-        WHERE email = #{email}
+    <select id="findByEmail" resultType="com.flab.todo.database.entity.Member">
+        select *
+        from member
+        where email = #{email}
+          and rownum = 1
     </select>
-
 </mapper>

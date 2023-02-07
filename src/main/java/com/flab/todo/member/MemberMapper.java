@@ -10,4 +10,5 @@ public interface MemberMapper {
 	void save(Member member);
 
 	Member findByEmail(String email);
+
 }

@@ -3,7 +3,7 @@ mybatis:
   configuration:
     map-underscore-to-camel-case: true
   type-aliases-package: com.flab.todo.database.entity
-  mapper-locations: mybatis-mapper/*.xml
+  mapper-locations: classpath:mybatis-mapper/*.xml
 
 # H2 DB 설정
 spring:
@@ -13,7 +13,7 @@ spring:
       path: /h2-console
   datasource:
     username: sa
-    url: jdbc:h2:~/test;
+    url: jdbc:h2:~/test
     driverClassName: org.h2.Driver
     password: ''
 
