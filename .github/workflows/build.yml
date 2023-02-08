@@ -10,7 +10,7 @@ on:
   pull_request:
     branches: [ "main", "dev" ]
     paths:
-      - 'todo-list/src/**'
+      - 'src/**'
 
 jobs:
   checkstyle:
@@ -31,7 +31,7 @@ jobs:
           level: warning
 
   build:
-    permissions: read
+    permissions: write-all
 
     runs-on: ubuntu-latest
 

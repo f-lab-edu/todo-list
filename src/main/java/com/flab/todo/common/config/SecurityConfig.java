@@ -1,15 +1,37 @@
 package com.flab.todo.common.config;
 
 import org.springframework.context.annotation.Bean;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+
+import org.springframework.security.web.SecurityFilterChain;
+
+import com.flab.todo.member.MemberService;
+
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 
 @EnableWebSecurity
 public class SecurityConfig {
+	private final MemberService memberService;
+
+	public SecurityConfig(MemberService memberService) {
+		this.memberService = memberService;
+	}
+
+	@Bean
+	public AuthenticationManager authenticationManager(HttpSecurity http, BCryptPasswordEncoder bCryptPasswordEncoder, MemberService memberService)
+		throws Exception {
+		return http.getSharedObject(AuthenticationManagerBuilder.class)
+			.userDetailsService(memberService)
+			.passwordEncoder(bCryptPasswordEncoder)
+			.and()
+			.build();
+	}
 
 	@Bean
 	public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
@@ -24,12 +46,10 @@ public class SecurityConfig {
 			.sessionCreationPolicy(SessionCreationPolicy.ALWAYS); // 항상 HttpSesion 을 만든다.
 
 		http
+			.csrf().disable()
+			.headers().frameOptions().disable()
+			.and()
 			.formLogin().disable();
 		return http.build();
-	}
-
-	@Bean
-	PasswordEncoder passwordEncoder() {
-		return new BCryptPasswordEncoder();
 	}
 }

@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.flab.todo.todo.TodoMapper">
+
+    <select id="findByUserId" resultType="Todo">
+        select * from todo where user_id = #{id}
+    </select>
+
+    <select id="existById" parameterType="Long" resultType="boolean">
+        SELECT
+        EXISTS
+        (SELECT 1 FROM todo WHERE id = #{todoId})
+    </select>
+
+    <insert id="save">
+        insert into todo (user_id, things, is_done) values (#{userId}, #{things}, #{isDone})
+        <selectKey keyProperty="id" resultType="Long" order="AFTER">
+            select MAX(id) FROM todo
+        </selectKey>
+    </insert>
+
+    <update id="update">
+        update todo SET user_id =#{userId}, things = #{things}, is_done = #{isDone} where id = #{id}
+    </update>
+
+    <delete id="delete" parameterType="Map">
+        delete FROM todo where id = #{todoId} and user_id = #{userId}
+    </delete>
+</mapper>
