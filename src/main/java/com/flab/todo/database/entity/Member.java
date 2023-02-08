@@ -27,10 +27,11 @@ public class Member {
 	public void generateToken() {
 		this.emailToken = UUID.randomUUID().toString();
 		this.emailTokenGeneratedAt = LocalDateTime.now();
+		this.tokenExpiration = emailTokenGeneratedAt.plusMinutes(5);
 	}
 
 	public boolean isValidToken(String token) {
-		return this.emailToken.equals(token);
+		return this.emailToken.equals(token) || LocalDateTime.now().isBefore(tokenExpiration);
 	}
 
 	public void completeSignUp() {

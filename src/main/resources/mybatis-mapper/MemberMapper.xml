@@ -17,4 +17,24 @@
         WHERE email = #{email}
     </select>
 
+
+    <select id="findByEmailAndEmailToken" resultType="com.flab.todo.database.entity.Member">
+        select *
+        from member
+        where email = #{email}
+        AND emailToken = #{emailToken}
+    </select>
+
+    <update id="update" parameterType="Member">
+        UPDATE member
+        SET email                 = #{email},
+        name                  = #{name},
+        password              = #{password},
+        emailToken            = #{emailToken},
+        joinedAt              = #{joinedAt},
+        emailTokenGeneratedAt = #{emailTokenGeneratedAt},
+        tokenExpiration       = #{tokenExpiration},
+        isValid               = #{isValid}
+        WHERE id = #{id}
+    </update>
 </mapper>
