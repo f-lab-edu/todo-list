@@ -20,7 +20,7 @@ import com.flab.todo.common.dto.SaveTodoResponse;
 import com.flab.todo.common.dto.TodoListResponse;
 import com.flab.todo.common.dto.UpdateTodoRequest;
 import com.flab.todo.common.dto.UpdateTodoResponse;
-import com.flab.todo.common.dto.UserDetailImpl;
+import com.flab.todo.common.config.security.UserDetailImpl;
 
 @RestController()
 @RequestMapping("/todo")

@@ -1,4 +1,4 @@
-package com.flab.todo.common.config;
+package com.flab.todo.common.config.mail;
 
 import java.util.Properties;
 

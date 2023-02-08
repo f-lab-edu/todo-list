@@ -1,4 +1,4 @@
-package com.flab.todo.common.dto;
+package com.flab.todo.common.config.security;
 
 import java.io.Serializable;
 import java.util.ArrayList;

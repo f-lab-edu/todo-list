@@ -19,7 +19,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.ActiveProfiles;
 
-import com.flab.todo.common.config.PasswordEncoder;
+import com.flab.todo.common.config.security.PasswordEncoder;
 import com.flab.todo.common.dto.SaveTodoRequest;
 import com.flab.todo.common.dto.SaveTodoResponse;
 import com.flab.todo.common.dto.TodoListResponse;
@@ -47,6 +47,10 @@ class TodoControllerTest {
 		memberMapper.save(
 			new Member(1L, "seonjin.kim@naver.com", "seonjin", passwordEncoder.encode("emm05235"),
 			null, null, null, null, true)
+		);
+		memberMapper.update(
+			new Member(1L, "seonjin.kim@naver.com", "seonjin", passwordEncoder.encode("emm05235"),
+				null, null, null, null, true)
 		);
 		todoMapper.save(
 			new Todo(1L, 1L, "일찍 자고 일어나기", false)

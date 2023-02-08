@@ -7,7 +7,6 @@ import javax.validation.constraints.NotNull;
 
 import org.hibernate.validator.constraints.Length;
 
-import com.flab.todo.common.validator.MatchPassword;
 import javax.validation.constraints.Pattern;
 import com.flab.todo.database.entity.Member;
 

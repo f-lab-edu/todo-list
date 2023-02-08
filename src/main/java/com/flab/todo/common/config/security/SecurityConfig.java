@@ -1,4 +1,4 @@
-package com.flab.todo.common.config;
+package com.flab.todo.common.config.security;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -12,17 +12,19 @@ import org.springframework.security.web.SecurityFilterChain;
 
 import com.flab.todo.member.MemberService;
 
-import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.web.SecurityFilterChain;
-
 @EnableWebSecurity
 public class SecurityConfig {
 	private final MemberService memberService;
+	private final PasswordEncoder passwordEncoder;
 
-	public SecurityConfig(MemberService memberService) {
+	public SecurityConfig(MemberService memberService, PasswordEncoder passwordEncoder) {
 		this.memberService = memberService;
+		this.passwordEncoder = passwordEncoder;
 	}
-
+	@Bean
+	public CustomAuthenticationProvider customAuthenticationProvider() {
+		return new CustomAuthenticationProvider(memberService, passwordEncoder);
+	}
 	@Bean
 	public AuthenticationManager authenticationManager(HttpSecurity http, BCryptPasswordEncoder bCryptPasswordEncoder, MemberService memberService)
 		throws Exception {
@@ -30,6 +32,7 @@ public class SecurityConfig {
 			.userDetailsService(memberService)
 			.passwordEncoder(bCryptPasswordEncoder)
 			.and()
+			.authenticationProvider(customAuthenticationProvider())
 			.build();
 	}
 

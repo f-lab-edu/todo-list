@@ -22,7 +22,7 @@ public class Member {
 	private LocalDateTime joinedAt;
 	private LocalDateTime emailTokenGeneratedAt;
 	private LocalDateTime tokenExpiration;
-	private boolean isValid = false;
+	private boolean isValid;
 
 	public void generateToken() {
 		this.emailToken = UUID.randomUUID().toString();
@@ -37,5 +37,20 @@ public class Member {
 	public void completeSignUp() {
 		this.isValid = true;
 		joinedAt = LocalDateTime.now();
+	}
+
+	@Override
+	public String toString() {
+		return "Member{" +
+			"id=" + id +
+			", email='" + email + '\'' +
+			", name='" + name + '\'' +
+			", password='" + password + '\'' +
+			", emailToken='" + emailToken + '\'' +
+			", joinedAt=" + joinedAt +
+			", emailTokenGeneratedAt=" + emailTokenGeneratedAt +
+			", tokenExpiration=" + tokenExpiration +
+			", isValid=" + isValid +
+			'}';
 	}
 }

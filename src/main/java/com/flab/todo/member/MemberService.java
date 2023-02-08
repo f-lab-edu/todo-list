@@ -1,26 +1,20 @@
 package com.flab.todo.member;
 
 
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.flab.todo.common.dto.RequestSignUp;
-import com.flab.todo.common.dto.UserDetailImpl;
+import com.flab.todo.common.config.security.UserDetailImpl;
 import com.flab.todo.common.exception.custom.UnAuthorizedException;
 
 import java.util.Optional;
 
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
-import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import com.flab.todo.common.dto.RequestSignUp;
 
 import com.flab.todo.database.entity.Member;
 

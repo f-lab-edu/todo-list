@@ -1,4 +1,4 @@
-package com.flab.todo.common.config;
+package com.flab.todo.common.config.security;
 
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Component;
