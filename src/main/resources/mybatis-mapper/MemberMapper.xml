@@ -7,14 +7,33 @@
 
     <!-- insert -->
     <insert id="save" parameterType="Member" useGeneratedKeys="true" keyProperty="id">
-        insert into member (email, name, password)
-        values (#{email}, #{name}, #{password})
+        insert into member (email, name, password, emailToken, isValid)
+        values (#{email}, #{name}, #{password}, #{emailToken}, #{isValid})
     </insert>
 
     <select id="findByEmail" resultType="com.flab.todo.database.entity.Member">
         select *
         from member
         where email = #{email}
-          and rownum = 1
     </select>
+
+    <select id="findByEmailAndEmailToken" resultType="com.flab.todo.database.entity.Member">
+        select *
+        from member
+        where email = #{email}
+          AND emailToken = #{emailToken}
+    </select>
+
+    <update id="update" parameterType="Member">
+        UPDATE member
+        SET email                 = #{email},
+            name                  = #{name},
+            password              = #{password},
+            emailToken            = #{emailToken},
+            joinedAt              = #{joinedAt},
+            emailTokenGeneratedAt = #{emailTokenGeneratedAt},
+            tokenExpiration       = #{tokenExpiration},
+            isValid               = #{isValid}
+        WHERE id = #{id}
+    </update>
 </mapper>

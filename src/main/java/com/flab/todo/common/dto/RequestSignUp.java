@@ -2,8 +2,7 @@ package com.flab.todo.common.dto;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
-
-import org.hibernate.validator.constraints.Length;
+import javax.validation.constraints.Pattern;
 
 import com.flab.todo.database.entity.Member;
 
@@ -22,15 +21,15 @@ public class RequestSignUp {
 	private String name;
 
 	@NotBlank(message = "비밀번호 입력은 필수입니다.")
-	@Length(min = 4, max = 16, message = "비밀번호는 4자 이상, 16자 이하로 입력해주세요.")
+	@Pattern(regexp = "^(?=.*[A-Za-z])(?=.*\\d)(?=.*[@$!%*#?&])[A-Za-z\\d@$!%*#?&]{8,}$", message = "비밀번호는 최소8자 이상, 문자1개, 숫자1개, 특수문자 1개 포함입니다.")
 	private String password;
 
 	@NotBlank(message = "비밀번호확인 입력은 필수입니다.")
-	@Length(min = 4, max = 16, message = "비밀번호는 4자 이상, 16자 이하로 입력해주세요.")
+	@Pattern(regexp = "^(?=.*[A-Za-z])(?=.*\\d)(?=.*[@$!%*#?&])[A-Za-z\\d@$!%*#?&]{8,}$", message = "비밀번호는 최소8자 이상, 문자1개, 숫자1개, 특수문자 1개 포함입니다.")
 	private String passwordConfirm;
 
 	public static Member from(RequestSignUp requestSignup, String encryptedPassword) {
 		return new Member(null, requestSignup.getEmail(), requestSignup.getName(), encryptedPassword,
-			null, null, null, false);
+			null, null, null, null, false);
 	}
 }

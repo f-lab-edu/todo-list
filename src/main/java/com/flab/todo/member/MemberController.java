@@ -23,27 +23,27 @@ public class MemberController {
 	private final MemberService memberService;
 
 	@PostMapping("/sign-up")
-	public ResponseEntity<Void> signUp(@RequestBody @Valid RequestSignUp SignUp, Errors errors) {
+	public ResponseEntity<Void> sendEmail(@RequestBody @Valid RequestSignUp sendEmail, Errors errors) {
 		if (errors.hasErrors()) {
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
 		}
-		memberService.SignUp(SignUp);
+		memberService.sendSignUpEmail(sendEmail);
 		return ResponseEntity.status(HttpStatus.CREATED).build();
 	}
 
 	@GetMapping("/check-email-token")
 	public ResponseEntity<String> verifyEmail(@RequestParam String token, @RequestParam String email) {
 
-		Member memberByEmail = memberService.findByEmail(email);
-		if (memberByEmail == null) {
-			return new ResponseEntity<>("wrong email", HttpStatus.BAD_REQUEST);
+		Member member = memberService.findByEmailAndEmailToken(email, token);
+		if (member == null) {
+			return new ResponseEntity<>("Email not found", HttpStatus.BAD_REQUEST);
 		}
 
-		if (!memberService.isValidToken(token)) {
+		if (!member.isValidToken(token)) {
 			return new ResponseEntity<>("Wrong Token", HttpStatus.BAD_REQUEST);
 		}
 
-		memberService.completeSignUp(memberByEmail);
+		memberService.completeSignUp(member);
 		return new ResponseEntity<>(HttpStatus.OK);
 	}
 }

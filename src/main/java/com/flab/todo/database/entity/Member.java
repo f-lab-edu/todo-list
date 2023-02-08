@@ -21,23 +21,21 @@ public class Member {
 	private String emailToken;
 	private LocalDateTime joinedAt;
 	private LocalDateTime emailTokenGeneratedAt;
-	private boolean isValid;
+	private LocalDateTime tokenExpiration;
+	private boolean isValid = false;
 
 	public void generateToken() {
 		this.emailToken = UUID.randomUUID().toString();
 		this.emailTokenGeneratedAt = LocalDateTime.now();
+		this.tokenExpiration = emailTokenGeneratedAt.plusMinutes(5);
 	}
 
 	public boolean isValidToken(String token) {
-		return this.emailToken.equals(token);
+		return this.emailToken.equals(token) || LocalDateTime.now().isBefore(tokenExpiration);
 	}
 
 	public void completeSignUp() {
 		this.isValid = true;
 		joinedAt = LocalDateTime.now();
-	}
-
-	public boolean resendConfirmEmail() {
-		return this.emailTokenGeneratedAt.isAfter(LocalDateTime.now().minusSeconds(10));
 	}
 }

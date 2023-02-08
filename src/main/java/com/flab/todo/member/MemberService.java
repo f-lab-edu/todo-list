@@ -1,5 +1,7 @@
 package com.flab.todo.member;
 
+import java.util.Optional;
+
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -23,22 +25,21 @@ public class MemberService {
 	private final JavaMailSender javaMailSender;
 
 	@Transactional
-	public void SignUp(RequestSignUp requestSignUp) {
+	public void sendSignUpEmail(RequestSignUp requestSignUp) {
 
-		Member member = saveNewSignUp(requestSignUp);
 		validateDuplicateUser(requestSignUp);
 		validatePasswordUser(requestSignUp);
+
+		String encryptedPassword = passwordEncoder.encode(requestSignUp.getPassword());
+		Member member = RequestSignUp.from(requestSignUp, encryptedPassword);
 		member.generateToken();
-		sendVerificationEmail(member);
+
+		sendVerificationEmailWithToken(member);
+
 		memberMapper.save(member);
 	}
 
-	private Member saveNewSignUp(RequestSignUp requestSignUp) {
-		String encryptedPassword = passwordEncoder.encode(requestSignUp.getPassword());
-		return RequestSignUp.from(requestSignUp, encryptedPassword);
-	}
-
-	private void sendVerificationEmail(Member member) {
+	private void sendVerificationEmailWithToken(Member member) {
 		SimpleMailMessage mailMessage = new SimpleMailMessage();
 		mailMessage.setTo(member.getEmail());
 		mailMessage.setSubject("회원 가입 메일 인증 번호");
@@ -48,31 +49,25 @@ public class MemberService {
 	}
 
 	public void validateDuplicateUser(RequestSignUp requestSignUp) {
-		Member memberEmail = memberMapper.findByEmail(requestSignUp.getEmail());
-		if (memberEmail != null && memberEmail.isValid()) {
+		Optional<Member> memberEmail = memberMapper.findByEmail(requestSignUp.getEmail());
+		if (memberEmail.isPresent()) {
 			throw new IllegalArgumentException("이미 가입된 회원입니다.");
 		}
 	}
-	
+
 	public void validatePasswordUser(RequestSignUp requestSignUp) {
 		if (!requestSignUp.getPassword().equals(requestSignUp.getPasswordConfirm())) {
 			throw new IllegalArgumentException("비밀번호가 서로 일치하지 않습니다.");
 		}
 	}
 
-	public Member findByEmail(String email) {
-		return memberMapper.findByEmail(email);
+	public Member findByEmailAndEmailToken(String email, String emailToken) {
+		return memberMapper.findByEmailAndEmailToken(email, emailToken);
 	}
 
-	public boolean isValidToken(String token) {
-		Member member = memberMapper.findByEmail(token);
-		if (member == null) {
-			return false;
-		}
-		return member.isValidToken(token);
-	}
-
+	@Transactional
 	public void completeSignUp(Member member) {
 		member.completeSignUp();
+		memberMapper.update(member);
 	}
 }
