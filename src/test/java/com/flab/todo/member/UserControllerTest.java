@@ -1,26 +1,9 @@
 package com.flab.todo.member;
 
-import org.junit.Test;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.context.ActiveProfiles;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@ActiveProfiles("test")
 class UserControllerTest {
-
-	@InjectMocks
-	UserController userController;
-	@Mock
-	UserService userService;
-	private MockMvc mockMvc;
-
-	@Test
-	void test_1() throws Exception {
-		// given
-
-		// when
-
-		// then
-	}
 }

@@ -12,8 +12,13 @@ public class UpdateTodoRequest {
 	public UpdateTodoRequest() {
 	}
 
-	public Todo toModel(Long userId){
-		return new Todo(null, userId, this.things, !this.isDone);
+	public UpdateTodoRequest(String things, Boolean isDone) {
+		this.things = things;
+		this.isDone = isDone;
+	}
+
+	public Todo toModel(Long todoId, Long userId){
+		return new Todo(todoId, userId, this.things, this.isDone);
 	}
 
 }

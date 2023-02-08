@@ -6,6 +6,9 @@
     <insert id="save" useGeneratedKeys="true" keyProperty="id">
         insert into member (email, name, password)
         values (#{email}, #{name}, #{password})
+        <selectKey keyProperty="id" resultType="Long" order="AFTER">
+            select MAX(id)+1 FROM member
+        </selectKey>
     </insert>
 
     <select id="findByEmail" resultType="Member">

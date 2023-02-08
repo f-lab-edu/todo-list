@@ -12,9 +12,10 @@ spring:
       path: /h2-console
   datasource:
     username: sa
-    url: jdbc:h2:~/test
+    url: jdbc:h2:mem:testdb;MODE=MySQL;
     driverClassName: org.h2.Driver
     password: ''
+    initialization-mode: always
 
   # email 관련 (Gmail)
   mail:
@@ -28,3 +29,7 @@ spring:
           auth: true
           starttls:
             enable: true
+
+  sql:
+    init:
+      mode: always

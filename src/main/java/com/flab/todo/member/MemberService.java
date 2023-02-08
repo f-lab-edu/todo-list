@@ -1,9 +1,15 @@
 package com.flab.todo.member;
 
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.flab.todo.common.dto.RequestSignUp;
+import com.flab.todo.common.dto.UserDetailImpl;
+import com.flab.todo.common.exception.custom.UnAuthorizedException;
 import com.flab.todo.database.entity.Member;
 
 import lombok.RequiredArgsConstructor;
@@ -12,7 +18,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class MemberService {
+public class MemberService implements UserDetailsService {
 
 	private final PasswordEncoder passwordEncoder;
 	private final MemberMapper memberMapper;
@@ -33,5 +39,15 @@ public class MemberService {
 		if (findMember != null) {
 			throw new IllegalArgumentException("이미 가입된 회원입니다.");
 		}
+	}
+
+	@Override
+	public UserDetails loadUserByUsername(String username) {
+		Member findMember = memberMapper.findByEmail(username);
+
+		if(findMember == null)
+			throw new UnAuthorizedException();
+
+		return new UserDetailImpl(findMember);
 	}
 }

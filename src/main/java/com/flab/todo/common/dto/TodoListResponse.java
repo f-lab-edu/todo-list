@@ -11,6 +11,9 @@ public class TodoListResponse {
 	private String value;
 	private Boolean isDone;
 
+	public TodoListResponse() {
+	}
+
 	public TodoListResponse(String value, Boolean isDone) {
 		this.value = value;
 		this.isDone = isDone;
