@@ -16,10 +16,13 @@ import com.flab.todo.member.MemberService;
 public class SecurityConfig {
 	private final MemberService memberService;
 	private final PasswordEncoder passwordEncoder;
+	private final UnauthorizedEntryPoint unauthorizedEntryPoint;
 
-	public SecurityConfig(MemberService memberService, PasswordEncoder passwordEncoder) {
+	public SecurityConfig(MemberService memberService, PasswordEncoder passwordEncoder,
+		UnauthorizedEntryPoint unauthorizedEntryPoint) {
 		this.memberService = memberService;
 		this.passwordEncoder = passwordEncoder;
+		this.unauthorizedEntryPoint = unauthorizedEntryPoint;
 	}
 	@Bean
 	public CustomAuthenticationProvider customAuthenticationProvider() {
@@ -38,6 +41,7 @@ public class SecurityConfig {
 
 	@Bean
 	public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+
 		http.authorizeRequests()
 			.anyRequest().permitAll()
 			.and().httpBasic()
@@ -52,7 +56,9 @@ public class SecurityConfig {
 			.csrf().disable()
 			.headers().frameOptions().disable()
 			.and()
-			.formLogin().disable();
+			.formLogin().disable()
+			.exceptionHandling()
+			.authenticationEntryPoint(unauthorizedEntryPoint);
 		return http.build();
 	}
 }

@@ -244,12 +244,12 @@ class TodoControllerTest {
 			testRestTemplate = new TestRestTemplate("seonjin.kim2@naver.com","emm05235");
 
 			//when
-			ResponseEntity<UpdateTodoResponse> response = testRestTemplate
+			ResponseEntity<Object> response = testRestTemplate
 				.exchange(
 					"http://localhost:"+randomServerPort+"/todo/"+1,
 					HttpMethod.DELETE,
 					null,
-					UpdateTodoResponse.class
+					Object.class
 				);
 
 			//then
