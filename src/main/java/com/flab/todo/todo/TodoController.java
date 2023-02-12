@@ -44,9 +44,6 @@ public class TodoController {
 		@RequestBody SaveTodoRequest saveTodoRequest,
 		@AuthenticationPrincipal UserDetailImpl userDetail
 	) {
-
-		System.out.println(saveTodoRequest);
-		System.out.println(userDetail);
 		SaveTodoResponse response= this.todoService.save(saveTodoRequest, userDetail.getUserId());
 		return new ResponseEntity<>(response, HttpStatus.CREATED);
 	}

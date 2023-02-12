@@ -29,17 +29,7 @@ public class MemberController {
 
 	@GetMapping("/check-email-token")
 	public ResponseEntity<String> verifyEmail(@RequestParam String token, @RequestParam String email) {
-
-		Member member = memberService.findByEmailAndEmailToken(email, token);
-		if (member == null) {
-			throw new IllegalArgumentException("Email not found");
-		}
-
-		if (!member.isValidToken(token)) {
-			throw new IllegalArgumentException("Wrong Token");
-		}
-
-		memberService.completeSignUp(member);
+		memberService.verifyEmailAndComplete(token, email);
 		return new ResponseEntity<>(HttpStatus.OK);
 	}
 }

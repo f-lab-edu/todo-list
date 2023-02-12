@@ -24,4 +24,12 @@ public class ErrorResponse {
 			.status(HttpStatus.BAD_REQUEST)
 			.body(errorResponse);
 	}
+
+	public static ResponseEntity from(HttpStatus httpStatus, String message) {
+		ErrorResponse errorResponse = new ErrorResponse(httpStatus.value(), httpStatus.name(), message);
+
+		return ResponseEntity
+			.status(HttpStatus.BAD_REQUEST)
+			.body(errorResponse);
+	}
 }

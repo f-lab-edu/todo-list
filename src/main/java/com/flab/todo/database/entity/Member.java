@@ -1,6 +1,7 @@
 package com.flab.todo.database.entity;
 
 import java.time.LocalDateTime;
+import java.util.Objects;
 import java.util.UUID;
 
 import lombok.AllArgsConstructor;
@@ -52,5 +53,25 @@ public class Member {
 			", tokenExpiration=" + tokenExpiration +
 			", isValid=" + isValid +
 			'}';
+	}
+
+	@Override
+	public boolean equals(Object o) {
+		if (this == o)
+			return true;
+		if (o == null || getClass() != o.getClass())
+			return false;
+		Member member = (Member)o;
+		return isValid == member.isValid && Objects.equals(id, member.id) && Objects.equals(email,
+			member.email) && Objects.equals(name, member.name) && Objects.equals(password,
+			member.password) && Objects.equals(emailToken, member.emailToken) && Objects.equals(
+			joinedAt, member.joinedAt) && Objects.equals(emailTokenGeneratedAt, member.emailTokenGeneratedAt)
+			&& Objects.equals(tokenExpiration, member.tokenExpiration);
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(id, email, name, password, emailToken, joinedAt, emailTokenGeneratedAt, tokenExpiration,
+			isValid);
 	}
 }

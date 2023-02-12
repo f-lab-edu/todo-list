@@ -36,7 +36,7 @@ public class GlobalExceptionHandler {
 	public ResponseEntity validMethodArgumentNotValidException(final MethodArgumentNotValidException ex) {
 		log.error("validMethodArgumentNotValidException", ex);
 		return ErrorResponse
-			.from(HttpStatus.BAD_REQUEST, ex);
+			.from(HttpStatus.BAD_REQUEST, ex.getBindingResult().getFieldError().getDefaultMessage()); // enum
 	}
 
 	// status - 500
