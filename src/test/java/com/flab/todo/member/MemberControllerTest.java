@@ -1,37 +1,43 @@
 package com.flab.todo.member;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import org.junit.jupiter.api.BeforeEach;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.web.client.TestRestTemplate;
-import org.springframework.boot.test.web.server.LocalServerPort;
-import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 @ActiveProfiles("test")
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 class MemberControllerTest {
 
-	@LocalServerPort
-	int randomServerPort;
+	@Mock
+	private JavaMailSender javaMailSender;
 
-	@Autowired
-	TestRestTemplate testRestTemplate;
+	@InjectMocks
+	private MemberController memberController;
 
-	@Autowired
-	PasswordEncoder passwordEncoder;
+	private MockMvc mockMvc;
 
-	@Autowired
-	MemberMapper memberMapper;
+	@BeforeEach
+	void setup() {
+		mockMvc = MockMvcBuilders.standaloneSetup(memberController).build();
+	}
 
-	// TODO ing~
 	// @Test
-	// @DisplayName()
-	// void case1() throws Exception {
-	//     // given
+	// void sendSignUpEmail_ShouldCallServiceAndReturnCreated() throws Exception {
+	// 	// given
+	// 	SignUpRequest signUpRequest = new SignUpRequest("cjyeon1022@gmail.com", "Jaeyeon", "12345678!q2", "12345678!q2");
 	//
-	//     // when
+	// 	// when
+	// 	mockMvc.perform(post("/sign-up")
+	// 			.contentType(MediaType.APPLICATION_JSON)
+	// 		.andExpect(status().isCreated());
 	//
-	//     // then
+	// 	// then
+	// 	verify(memberService).sendSignUpEmail(any(SignUpRequest.class));
 	// }
 
 }

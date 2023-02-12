@@ -4,8 +4,8 @@
 <mapper namespace="com.flab.todo.member.MemberMapper">
 
     <insert id="save" useGeneratedKeys="true" keyProperty="id">
-        insert into member (email, name, password)
-        values (#{email}, #{name}, #{password})
+        insert into member (email, name, password, emailToken, isValid)
+        values (#{email}, #{name}, #{password}, #{emailToken}, #{isValid})
         <selectKey keyProperty="id" resultType="Long" order="AFTER">
             select MAX(id)+1 FROM member
         </selectKey>
@@ -17,24 +17,30 @@
         WHERE email = #{email}
     </select>
 
+    <select id="existsByEmail" resultType="boolean">
+        select COUNT(1) > 0
+        FROM member
+        WHERE email = #{email}
+    </select>
+
 
     <select id="findByEmailAndEmailToken" resultType="com.flab.todo.database.entity.Member">
         select *
         from member
         where email = #{email}
-        AND emailToken = #{emailToken}
+          AND emailToken = #{emailToken}
     </select>
 
     <update id="update" parameterType="Member">
         UPDATE member
         SET email                 = #{email},
-        name                  = #{name},
-        password              = #{password},
-        emailToken            = #{emailToken},
-        joinedAt              = #{joinedAt},
-        emailTokenGeneratedAt = #{emailTokenGeneratedAt},
-        tokenExpiration       = #{tokenExpiration},
-        isValid               = #{isValid}
+            name                  = #{name},
+            password              = #{password},
+            emailToken            = #{emailToken},
+            joinedAt              = #{joinedAt},
+            emailTokenGeneratedAt = #{emailTokenGeneratedAt},
+            tokenExpiration       = #{tokenExpiration},
+            isValid               = #{isValid}
         WHERE id = #{id}
     </update>
 </mapper>

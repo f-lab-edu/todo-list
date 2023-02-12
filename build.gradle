@@ -42,6 +42,7 @@ dependencies {
     compileOnly 'org.projectlombok:lombok'
     implementation 'com.h2database:h2'
     annotationProcessor 'org.projectlombok:lombok'
+    annotationProcessor "org.springframework.boot:spring-boot-configuration-processor"
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     implementation group: 'org.apache.httpcomponents', name: 'httpclient', version: '4.5'
 }

@@ -1,36 +1,39 @@
 package com.flab.todo.member;
 
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.security.crypto.password.PasswordEncoder;
 
 @ExtendWith(MockitoExtension.class)
 class MemberServiceTest {
+	//
+	// @Autowired
+	// private MemberService memberService;
 
-	@Mock
-	MemberService memberService;
-
-	@Mock
-	MemberMapper memberMapper;
-
-	@Mock
-	PasswordEncoder passwordEncoder;
-
-	// TODO ING~
+	// @Autowired
+	// private MemberMapper memberMapper;
+	//
+	// @Autowired
+	// private PasswordEncoder passwordEncoder;
+	//
+	// @Autowired
+	// private JavaMailService javaMailService;
+	//
 	// @Test
-	// @DisplayName("Save Member - Correct Validation")
-	// void case1() throws Exception {
+	// @DisplayName("1. 회원 가입 - 성공")
+	// void case1() {
 	// 	// given
-	// 	RequestSignUp requestSignUp = new RequestSignUp();
-	// 	String encryptedPassword = passwordEncoder.encode(requestSignUp.getPassword());
-	// 	Member member = RequestSignUp.from(requestSignUp, encryptedPassword);
+	// 	SignUpRequest signUpRequest = new SignUpRequest("cjyeon1022@gmail.com", "Jaeyeon", "12345678!q2",
+	// 		"12345678!q2");
+	//
+	// 	given(memberMapper.existsByEmail("cjyeon1022@gmail.com")).willReturn(false);
+	// 	String encryptedPassword = passwordEncoder.encode(signUpRequest.getPassword());
 	//
 	// 	// when
-	// 	memberMapper.save(member);
+	// 	memberService.sendSignUpEmail(signUpRequest);
 	//
 	// 	// then
-	// 	then(memberService).should();
-	//
+	// 	verify(memberMapper, times(1)).save(
+	// 		new Member(signUpRequest.getEmail(), signUpRequest.getName(), encryptedPassword));
+	// 	verify(javaMailService, times(1)).sendVerificationEmailWithToken(any(Member.class));
 	// }
 }
