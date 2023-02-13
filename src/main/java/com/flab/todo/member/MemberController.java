@@ -11,7 +11,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.flab.todo.common.dto.SignUpRequest;
-import com.flab.todo.database.entity.Member;
 
 import lombok.RequiredArgsConstructor;
 

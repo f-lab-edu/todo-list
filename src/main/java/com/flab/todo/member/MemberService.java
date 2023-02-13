@@ -1,6 +1,5 @@
 package com.flab.todo.member;
 
-import org.springframework.mail.SimpleMailMessage;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -25,20 +24,20 @@ public class MemberService implements UserDetailsService {
 	private final MemberMapper memberMapper;
 	private final JavaMailService javaMailService;
 
-	public void verifyEmailAndComplete(String token, String email){
+	public void verifyEmailAndComplete(String token, String email) {
 		Member member = memberMapper.findByEmailAndEmailToken(email, token);
 		validateIsExistEmail(member);
 		validateIsValidToken(member, token);
 		completeSignUp(member);
 	}
 
-	private void validateIsExistEmail(Member member){
+	private void validateIsExistEmail(Member member) {
 		if (member == null) {
 			throw new IllegalArgumentException("Email not found");
 		}
 	}
 
-	private void validateIsValidToken(Member member, String token){
+	private void validateIsValidToken(Member member, String token) {
 		if (!member.isValidToken(token)) {
 			throw new IllegalArgumentException("Wrong Token");
 		}
@@ -63,7 +62,6 @@ public class MemberService implements UserDetailsService {
 		memberMapper.save(member);
 	}
 
-
 	private void validateDuplicateUser(SignUpRequest signUpRequest) {
 		boolean existsByEmail = memberMapper.existsByEmail(signUpRequest.getEmail());
 		if (existsByEmail) {
@@ -80,7 +78,9 @@ public class MemberService implements UserDetailsService {
 	private void sendVerificationEmailWithToken(Member member) {
 		MailMessage mailMessage = MailMessage.makeVerifyMailFrom(member);
 		javaMailService.send(mailMessage);
-		log.info("Sent verification email to: " + member.getEmail() + " with link: " + MailMessage.makeEmailVerificationLink(member.getEmailToken(), member.getEmail()));
+		log.info(
+			"Sent verification email to: " + member.getEmail() + " with link: " + MailMessage.makeEmailVerificationLink(
+				member.getEmailToken(), member.getEmail()));
 	}
 
 	@Override

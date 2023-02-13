@@ -1,28 +1,18 @@
 package com.flab.todo.member;
 
-import static org.hamcrest.CoreMatchers.*;
-import static org.hamcrest.MatcherAssert.*;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.BDDMockito.*;
-
-import java.util.List;
-import java.util.stream.Collectors;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentMatchers;
 import org.mockito.Mockito;
-import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import com.flab.todo.common.config.mail.JavaMailService;
 import com.flab.todo.common.config.security.PasswordEncoder;
 import com.flab.todo.common.dto.SignUpRequest;
-import com.flab.todo.common.dto.TodoListResponse;
 import com.flab.todo.database.entity.Member;
-import com.flab.todo.database.entity.Todo;
 
 class MemberServiceTest {
 	private PasswordEncoder passwordEncoder = new PasswordEncoder();
@@ -31,13 +21,14 @@ class MemberServiceTest {
 	private MemberService memberService = new MemberService(passwordEncoder, memberMapper, javaMailService);
 
 	@Nested
-	@DisplayName("Get Todo List")
-	class GetTodoListTest {
+	@DisplayName("회원가입")
+	class sendSignUp {
 		@Test
-		@DisplayName("Todo List를 성공적으로 반환")
+		@DisplayName("1. 성공 - 이메일 전송")
 		public void case1() {
 			// Given
-			SignUpRequest signUpRequest = new SignUpRequest("cjyeon1022@gmail.com", "Jaeyeon", "12345678!q2", "12345678!q2");
+			SignUpRequest signUpRequest = new SignUpRequest("cjyeon1022@gmail.com", "Jaeyeon", "12345678!q2",
+				"12345678!q2");
 			given(memberMapper.existsByEmail("cjyeon1022@gmail.com")).willReturn(false);
 
 			// When
@@ -48,10 +39,11 @@ class MemberServiceTest {
 		}
 
 		@Test
-		@DisplayName("이미 존재하는 Email")
+		@DisplayName("2. 실패 - 이미 존재하는 Email")
 		public void case2() {
 			// Given
-			SignUpRequest signUpRequest = new SignUpRequest("cjyeon1022@gmail.com", "Jaeyeon", "12345678!q2", "12345678!q2");
+			SignUpRequest signUpRequest = new SignUpRequest("cjyeon1022@gmail.com", "Jaeyeon", "12345678!q2",
+				"12345678!q2");
 			given(memberMapper.existsByEmail("cjyeon1022@gmail.com")).willReturn(true);
 
 			// When
@@ -62,50 +54,73 @@ class MemberServiceTest {
 			// Then
 			assertTrue(exception.getMessage().equals("이미 가입된 회원입니다."));
 		}
+
+		@Test
+		@DisplayName("3. 실패 - 일치하지 않는 패스워드")
+		public void case3() {
+			// Given
+			SignUpRequest signUpRequest = new SignUpRequest("cjyeon1022@gmail.com", "Jaeyeon", "12345678!q2",
+				"12345678!112");
+			given(memberMapper.existsByEmail("cjyeon1022@gmail.com")).willReturn(false);
+
+			// When
+			Exception exception = assertThrows(IllegalArgumentException.class, () -> {
+				memberService.sendSignUpEmail(signUpRequest);
+			});
+
+			// Then
+			assertTrue(exception.getMessage().equals("비밀번호가 서로 일치하지 않습니다."));
+		}
 	}
 
-	/*
+	@Nested
+	@DisplayName("이메일 인증")
+	class checkEmailToken {
 
-		validateDuplicateUser(signUpRequest);
-		validatePasswordUser(signUpRequest);
+		@Test
+		@DisplayName("1. 성공")
+		void cas1() throws Exception {
+			// given
+			String token = "Valid";
+			SignUpRequest signUpRequest = new SignUpRequest("cjyeon1022@gmail.com", "Jaeyeon", "12345678!q2",
+				"12345678!q2");
+			given(memberMapper.findByEmailAndEmailToken(signUpRequest.getEmail(), token)).willReturn(new Member());
 
-		String encryptedPassword = passwordEncoder.encode(signUpRequest.getPassword());
-		Member member = SignUpRequest.from(signUpRequest, encryptedPassword);
-		member.generateToken();
+			// when
+			memberService.verifyEmailAndComplete(token, signUpRequest.getEmail());
 
-		sendVerificationEmailWithToken(member);
+			// then
+			verify(memberMapper, times(1)).save(ArgumentMatchers.any(Member.class));
+		}
 
-		memberMapper.save(member);
-	 */
-	//
-	// @Autowired
-	// private MemberService memberService;
+		@Test
+		@DisplayName("2. 실패 - 존재하지 않는 이메일")
+		void case2() throws Exception {
+			// given
+			String token = "Valid";
+			SignUpRequest signUpRequest = new SignUpRequest("cjyeon1022@gmail.com", "Jaeyeon", "12345678!q2",
+				"12345678!q2");
+			given(memberMapper.findByEmailAndEmailToken(signUpRequest.getEmail(), token)).willReturn(new Member());
 
-	// @Autowired
-	// private MemberMapper memberMapper;
-	//
-	// @Autowired
-	// private PasswordEncoder passwordEncoder;
-	//
-	// @Autowired
-	// private JavaMailService javaMailService;
-	//
-	// @Test
-	// @DisplayName("1. 회원 가입 - 성공")
-	// void case1() {
-	// 	// given
-	// 	SignUpRequest signUpRequest = new SignUpRequest("cjyeon1022@gmail.com", "Jaeyeon", "12345678!q2",
-	// 		"12345678!q2");
-	//
-	// 	given(memberMapper.existsByEmail("cjyeon1022@gmail.com")).willReturn(false);
-	// 	String encryptedPassword = passwordEncoder.encode(signUpRequest.getPassword());
-	//
-	// 	// when
-	// 	memberService.sendSignUpEmail(signUpRequest);
-	//
-	// 	// then
-	// 	verify(memberMapper, times(1)).save(
-	// 		new Member(signUpRequest.getEmail(), signUpRequest.getName(), encryptedPassword));
-	// 	verify(javaMailService, times(1)).sendVerificationEmailWithToken(any(Member.class));
-	// }
+			// when
+			memberService.verifyEmailAndComplete(token, signUpRequest.getEmail());
+
+			// then
+		}
+
+		@Test
+		@DisplayName("3. 실패 - 틀린 토큰")
+		void case3() throws Exception {
+			// given
+			String token = "Valid";
+			SignUpRequest signUpRequest = new SignUpRequest("cjyeon1022@gmail.com", "Jaeyeon", "12345678!q2",
+				"12345678!q2");
+			given(memberMapper.findByEmailAndEmailToken(signUpRequest.getEmail(), token)).willReturn(new Member());
+
+			// when
+			memberService.verifyEmailAndComplete(token, signUpRequest.getEmail());
+
+			// then
+		}
+	}
 }
