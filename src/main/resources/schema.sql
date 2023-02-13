@@ -1,4 +1,4 @@
-CREATE TABLE todo (
+CREATE TABLE IF NOT EXISTS todo (
   id BIGINT AUTO_INCREMENT,
   user_id INT NOT NULL,
   things VARCHAR(45) NOT NULL,
@@ -6,7 +6,7 @@ CREATE TABLE todo (
   PRIMARY KEY (`id`)
 );
 
-CREATE TABLE member (
+CREATE TABLE IF NOT EXISTS member (
     id BIGINT AUTO_INCREMENT,
     email VARCHAR(255) NOT NULL unique,
     name VARCHAR(255) NOT NULL,
