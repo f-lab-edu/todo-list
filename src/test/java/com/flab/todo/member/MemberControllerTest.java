@@ -37,22 +37,9 @@ class MemberControllerTest {
 	@MockBean
 	private JavaMailService javaMailService;
 	// MemberService mocking vs JavaMailService mocking
+	@Autowired MemberMapper memberMapper;
 
-	@BeforeAll
-	private static void setDB(
-		@Autowired MemberMapper memberMapper,
-		@Autowired PasswordEncoder passwordEncoder
-	) {
-		memberMapper.save(
-
-			new Member(1L, "test@gmail.com", "testUser", passwordEncoder.encode("12345678!q2"),
-				null, null, null, null, true)
-		);
-		memberMapper.update(
-			new Member(1L, "seonjin.kim@naver.com", "seonjin", passwordEncoder.encode("12345678!q2"),
-				null, null, null, null, true)
-		);
-	}
+	@Autowired PasswordEncoder passwordEncoder;
 
 	@Nested
 	@DisplayName("회원가입")
@@ -130,22 +117,24 @@ class MemberControllerTest {
 		@DisplayName("1. 인증 성공")
 		void success() {
 			// given
-			String token = "ValidToken";
-			SignUpRequest signUpRequest = new SignUpRequest("cjyeon1022@gmail.com", "Jaeyeon", "12345678!q2",
-				"12345678!q2");
-			given()
+			Member member = SignUpRequest.from(new SignUpRequest("cjyeon1022@gmail.com", "Jaeyeon", "12345678!q2",
+				"12345678!q2"), passwordEncoder.encode("12345678!q2"));
+			member.generateToken();
+			memberMapper.save(member);
+			String token = member.getEmailToken();
 
 			// when
-			ResponseEntity<String> response = testRestTemplate
+			ResponseEntity<Void> response = testRestTemplate
 				.getForEntity("http://localhost:" + randomServerPort + "/check-email-token?token={token}&email={email}",
-					String.class,
+					Void.class,
 					token,
-					signUpRequest.getEmail()
+					"cjyeon1022@gmail.com"
 				);
 
 			// then
 			assertEquals(HttpStatus.OK, response.getStatusCode());
 		}
+
 		//
 		// @Test
 		// @DisplayName("2. 실패 - 이메일이 없습니다")

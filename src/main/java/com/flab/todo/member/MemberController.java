@@ -27,7 +27,7 @@ public class MemberController {
 	}
 
 	@GetMapping("/check-email-token")
-	public ResponseEntity<String> verifyEmail(@RequestParam String token, @RequestParam String email) {
+	public ResponseEntity<Void> verifyEmail(@RequestParam String token, @RequestParam String email) {
 		memberService.verifyEmailAndComplete(token, email);
 		return new ResponseEntity<>(HttpStatus.OK);
 	}
