@@ -43,4 +43,9 @@
             isValid               = #{isValid}
         WHERE id = #{id}
     </update>
+
+    <delete id="deleteAll">
+        DELETE
+        FROM member
+    </delete>
 </mapper>

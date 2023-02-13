@@ -19,4 +19,6 @@ public interface MemberMapper {
 	void update(Member member);
 
 	Member findByEmailAndEmailToken(@Param("email") String email, @Param("emailToken") String emailToken);
+
+	void deleteAll();
 }

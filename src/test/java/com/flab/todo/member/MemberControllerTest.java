@@ -3,7 +3,7 @@ package com.flab.todo.member;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.BDDMockito.*;
 
-import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -37,9 +37,16 @@ class MemberControllerTest {
 	@MockBean
 	private JavaMailService javaMailService;
 	// MemberService mocking vs JavaMailService mocking
-	@Autowired MemberMapper memberMapper;
+	@Autowired
+	MemberMapper memberMapper;
 
-	@Autowired PasswordEncoder passwordEncoder;
+	@Autowired
+	PasswordEncoder passwordEncoder;
+
+	@BeforeEach
+	void beforeEach() {
+		memberMapper.deleteAll();
+	}
 
 	@Nested
 	@DisplayName("회원가입")
@@ -55,12 +62,12 @@ class MemberControllerTest {
 			// 실제 메일 보내는 로직 mocking
 			willDoNothing().given(javaMailService).send(new MailMessage());
 
-			ResponseEntity<Object> response = testRestTemplate
+			ResponseEntity<Void> response = testRestTemplate
 				.exchange(
 					"http://localhost:" + randomServerPort + "/sign-up",
 					HttpMethod.POST,
 					requestEntity,
-					Object.class
+					Void.class
 				);
 
 			assertEquals(HttpStatus.CREATED, response.getStatusCode());
@@ -76,12 +83,12 @@ class MemberControllerTest {
 			// 실제 메일 보내는 로직 mocking
 			willDoNothing().given(javaMailService).send(new MailMessage());
 
-			ResponseEntity<Object> response = testRestTemplate
+			ResponseEntity<Void> response = testRestTemplate
 				.exchange(
 					"http://localhost:" + randomServerPort + "/sign-up",
 					HttpMethod.POST,
 					requestEntity,
-					Object.class
+					Void.class
 				);
 
 			assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
@@ -97,12 +104,12 @@ class MemberControllerTest {
 			// 실제 메일 보내는 로직 mocking
 			willDoNothing().given(javaMailService).send(new MailMessage());
 
-			ResponseEntity<Object> response = testRestTemplate
+			ResponseEntity<Void> response = testRestTemplate
 				.exchange(
 					"http://localhost:" + randomServerPort + "/sign-up",
 					HttpMethod.POST,
 					requestEntity,
-					Object.class
+					Void.class
 				);
 
 			assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
@@ -135,25 +142,48 @@ class MemberControllerTest {
 			assertEquals(HttpStatus.OK, response.getStatusCode());
 		}
 
-		//
-		// @Test
-		// @DisplayName("2. 실패 - 이메일이 없습니다")
-		// void fail_valid_email() {
-		//     // given
-		//
-		//     // when
-		//
-		//     // then
-		// }
-		//
-		// @Test
-		// @DisplayName("3. 실패 - 토큰이 일치하지 않습니다")
-		// void fail_valid_token() {
-		//     // given
-		//
-		//     // when
-		//
-		//     // then
-		// }
+		@Test
+		@DisplayName("2. 실패 - 이메일이 없습니다")
+		void fail_valid_email() {
+			// given
+			Member member = SignUpRequest.from(new SignUpRequest("cjyeon1022@gmail.com", "Jaeyeon", "12345678!q2",
+				"12345678!q2"), passwordEncoder.encode("12345678!q2"));
+			member.generateToken();
+			memberMapper.save(member);
+			String token = member.getEmailToken();
+
+			// when
+			ResponseEntity<Void> response = testRestTemplate
+				.getForEntity("http://localhost:" + randomServerPort + "/check-email-token?token={token}&email={email}",
+					Void.class,
+					token,
+					null
+				);
+
+			// then
+			assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
+		}
+
+		@Test
+		@DisplayName("3. 실패 - 토큰이 일치하지 않습니다")
+		void fail_valid_token() {
+			// given
+			Member member = SignUpRequest.from(new SignUpRequest("cjyeon1022@gmail.com", "Jaeyeon", "12345678!q2",
+				"12345678!q2"), passwordEncoder.encode("12345678!q2"));
+			member.generateToken();
+			memberMapper.save(member);
+			String token = member.getEmailToken();
+
+			// when
+			ResponseEntity<Void> response = testRestTemplate
+				.getForEntity("http://localhost:" + randomServerPort + "/check-email-token?token={token}&email={email}",
+					Void.class,
+					!member.isValidToken(token),
+					"cjyeon1022@gmail.com"
+				);
+
+			// then
+			assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
+		}
 	}
 }

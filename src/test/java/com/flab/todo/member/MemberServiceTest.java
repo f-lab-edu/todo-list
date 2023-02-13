@@ -3,15 +3,20 @@ package com.flab.todo.member;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.BDDMockito.*;
 
+import java.util.Optional;
+import java.util.UUID;
+
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentMatchers;
 import org.mockito.Mockito;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import com.flab.todo.common.config.mail.JavaMailService;
 import com.flab.todo.common.config.security.PasswordEncoder;
 import com.flab.todo.common.dto.SignUpRequest;
+import com.flab.todo.common.exception.custom.UnAuthorizedException;
 import com.flab.todo.database.entity.Member;
 
 class MemberServiceTest {
@@ -74,53 +79,107 @@ class MemberServiceTest {
 	}
 
 	@Nested
-	@DisplayName("이메일 인증")
+	@DisplayName("이메일 검증")
 	class checkEmailToken {
 
 		@Test
 		@DisplayName("1. 성공")
 		void cas1() throws Exception {
 			// given
-			String token = "Valid";
-			SignUpRequest signUpRequest = new SignUpRequest("cjyeon1022@gmail.com", "Jaeyeon", "12345678!q2",
-				"12345678!q2");
-			given(memberMapper.findByEmailAndEmailToken(signUpRequest.getEmail(), token)).willReturn(new Member());
+			Member member = SignUpRequest.from(new SignUpRequest("cjyeon1022@gmail.com", "Jaeyeon", "12345678!q2",
+				"12345678!q2"), passwordEncoder.encode("12345678!q2"));
+			member.generateToken();
+			memberMapper.save(member);
+			String token = member.getEmailToken();
+			given(memberMapper.findByEmailAndEmailToken(member.getEmail(), token)).willReturn(member);
 
 			// when
-			memberService.verifyEmailAndComplete(token, signUpRequest.getEmail());
+			memberService.verifyEmailAndComplete(token, member.getEmail());
 
 			// then
-			verify(memberMapper, times(1)).save(ArgumentMatchers.any(Member.class));
+			verify(memberMapper, times(1)).update(ArgumentMatchers.any(Member.class));
 		}
 
 		@Test
 		@DisplayName("2. 실패 - 존재하지 않는 이메일")
-		void case2() throws Exception {
+		void case2() {
 			// given
-			String token = "Valid";
-			SignUpRequest signUpRequest = new SignUpRequest("cjyeon1022@gmail.com", "Jaeyeon", "12345678!q2",
-				"12345678!q2");
-			given(memberMapper.findByEmailAndEmailToken(signUpRequest.getEmail(), token)).willReturn(new Member());
+			Member member = SignUpRequest.from(new SignUpRequest(null, "Jaeyeon", "12345678!q2",
+				"12345678!q2"), passwordEncoder.encode("12345678!q2"));
+			member.generateToken();
+			memberMapper.save(member);
+			String token = member.getEmailToken();
+			given(memberMapper.findByEmailAndEmailToken(member.getEmail(), token)).willReturn(null);
 
-			// when
-			memberService.verifyEmailAndComplete(token, signUpRequest.getEmail());
+			// When
+			Exception exception = assertThrows(IllegalArgumentException.class, () -> {
+				memberService.verifyEmailAndComplete(token, member.getEmail());
+			});
 
-			// then
+			// Then
+			assertTrue(exception.getMessage().equals("Email not found"));
 		}
 
+		// TODO ERROR
 		@Test
 		@DisplayName("3. 실패 - 틀린 토큰")
+		void case3() {
+			// given
+			Member member = SignUpRequest.from(new SignUpRequest("cjyeon1022@gmail.com", "Jaeyeon", "12345678!q2",
+				"12345678!q2"), passwordEncoder.encode("12345678!q2"));
+			member.generateToken();
+			memberMapper.save(member);
+			String token = member.getEmailToken();
+			given(memberMapper.findByEmailAndEmailToken(member.getEmail(), token)).willReturn(member);
+
+			// When
+			String randomToken = UUID.randomUUID().toString();
+			Exception exception = assertThrows(IllegalArgumentException.class, () -> {
+				memberService.verifyEmailAndComplete(randomToken, member.getEmail());
+			});
+
+			// Then
+			assertEquals("Wrong Token", exception.getMessage());
+		}
+	}
+
+	@Nested
+	@DisplayName("회원 로그인")
+	class login {
+		@Test
+		@DisplayName("1. 성공 - 회원 로그인")
 		void case3() throws Exception {
 			// given
-			String token = "Valid";
-			SignUpRequest signUpRequest = new SignUpRequest("cjyeon1022@gmail.com", "Jaeyeon", "12345678!q2",
-				"12345678!q2");
-			given(memberMapper.findByEmailAndEmailToken(signUpRequest.getEmail(), token)).willReturn(new Member());
+			Member member = SignUpRequest.from(new SignUpRequest("cjyeon1022@gmail.com", "Jaeyeon", "12345678!q2",
+				"12345678!q2"), passwordEncoder.encode("12345678!q2"));
+			member.generateToken();
+			memberMapper.save(member);
+			given(memberMapper.findByEmail(member.getEmail())).willReturn(Optional.of(member));
 
 			// when
-			memberService.verifyEmailAndComplete(token, signUpRequest.getEmail());
+			UserDetails userDetails = memberService.loadUserByUsername(member.getEmail());
 
 			// then
+			assertEquals(member.getEmail(), userDetails.getUsername());
 		}
+	}
+
+	@Test
+	@DisplayName("2. 실패 - 회원 정보 불일치(이메일)")
+	void case4() throws Exception {
+		// given
+		Member member = SignUpRequest.from(new SignUpRequest("cjyeon1022@gmail.com", "Jaeyeon", "12345678!q2",
+			"12345678!q2"), passwordEncoder.encode("12345678!q2"));
+		member.generateToken();
+		memberMapper.save(member);
+		given(memberMapper.findByEmail(member.getEmail())).willReturn(Optional.empty());
+
+		// When
+		Exception exception = assertThrows(UnAuthorizedException.class, () -> {
+			memberService.loadUserByUsername(member.getEmail());
+		});
+
+		// Then
+		assertTrue(exception.getMessage().equals("Unauthorized Request"));
 	}
 }
