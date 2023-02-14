@@ -36,4 +36,8 @@ public class SignUpRequest {
 		return new Member(null, signupRequest.getEmail(), signupRequest.getName(), encryptedPassword, null, null, null,
 			false);
 	}
+
+	public Boolean isValidPassword(){
+		return this.getPassword().equals(this.getPasswordConfirm());
+	}
 }
