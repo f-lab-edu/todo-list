@@ -1,4 +1,4 @@
-package com.flab.todo.common.config.security;
+package com.flab.todo.common.config.security.user_detail;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -10,7 +10,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import com.flab.todo.database.entity.Member;
 
 public class UserDetailImpl implements UserDetails, Serializable {
-	private Member member;
+	private final Member member;
 
 	public UserDetailImpl(Member member) {
 		this.member = member;
@@ -26,8 +26,7 @@ public class UserDetailImpl implements UserDetails, Serializable {
 
 	@Override
 	public Collection<GrantedAuthority> getAuthorities() {
-		Collection<GrantedAuthority> authorities = new ArrayList<>();
-		return authorities;
+		return new ArrayList<>();
 	}
 
 	@Override

@@ -4,17 +4,18 @@ import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
+import com.flab.todo.common.config.security.user_detail.UserDetailImpl;
 import com.flab.todo.common.exception.custom.UnAuthorizedException;
-import com.flab.todo.member.MemberService;
 
 public class CustomAuthenticationProvider implements AuthenticationProvider {
-	private final MemberService memberService;
-	private final BCryptPasswordEncoder passwordEncoder;
+	private final UserDetailsService userDetailsService;
+	private final PasswordEncoder passwordEncoder;
 
-	public CustomAuthenticationProvider(MemberService memberService, BCryptPasswordEncoder passwordEncoder) {
-		this.memberService = memberService;
+	public CustomAuthenticationProvider(UserDetailsService userDetailsService, PasswordEncoder passwordEncoder) {
+		this.userDetailsService = userDetailsService;
 		this.passwordEncoder = passwordEncoder;
 	}
 
@@ -30,7 +31,7 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
 		UserDetailImpl dbUser = null;
 		//UserDetailsService를 통해 DB에서 조회한 사용자
 		try {
-			dbUser = (UserDetailImpl)memberService.loadUserByUsername(userId);
+			dbUser = (UserDetailImpl)userDetailsService.loadUserByUsername(userId);
 		} catch (UnAuthorizedException ex) {
 			throw new AuthenticationException("해당 이메일의 유저가 존재하지 않습니다.") {
 			};
