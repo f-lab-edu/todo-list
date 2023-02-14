@@ -7,7 +7,7 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
-import com.flab.todo.common.config.security.user_detail.UserDetailImpl;
+import com.flab.todo.common.config.security.userdetail.UserDetailImpl;
 import com.flab.todo.common.exception.custom.UnAuthorizedException;
 
 public class CustomAuthenticationProvider implements AuthenticationProvider {

@@ -11,13 +11,11 @@ import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentMatchers;
 import org.mockito.Mockito;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import com.flab.todo.common.config.mail.JavaMailService;
 import com.flab.todo.common.dto.SignUpRequest;
-import com.flab.todo.common.exception.custom.UnAuthorizedException;
 import com.flab.todo.database.entity.Member;
 
 class MemberServiceTest {
@@ -87,8 +85,9 @@ class MemberServiceTest {
 		@DisplayName("1. 성공")
 		void cas1() throws Exception {
 			// given
-			Member member = SignUpRequest.from(new SignUpRequest("cjyeon1022@gmail.com", "Jaeyeon", "12345678!q2",
-				"12345678!q2"), passwordEncoder.encode("12345678!q2"));
+			Member member = SignUpRequest.from(
+				new SignUpRequest("cjyeon1022@gmail.com", "Jaeyeon", "12345678!q2", "12345678!q2"),
+				passwordEncoder.encode("12345678!q2"));
 			member.generateToken();
 			memberMapper.save(member);
 			String token = member.getEmailToken();
@@ -105,8 +104,8 @@ class MemberServiceTest {
 		@DisplayName("2. 실패 - 존재하지 않는 이메일")
 		void case2() {
 			// given
-			Member member = SignUpRequest.from(new SignUpRequest(null, "Jaeyeon", "12345678!q2",
-				"12345678!q2"), passwordEncoder.encode("12345678!q2"));
+			Member member = SignUpRequest.from(new SignUpRequest(null, "Jaeyeon", "12345678!q2", "12345678!q2"),
+				passwordEncoder.encode("12345678!q2"));
 			member.generateToken();
 			memberMapper.save(member);
 			String token = member.getEmailToken();
@@ -125,12 +124,14 @@ class MemberServiceTest {
 		@DisplayName("3. 실패 - 틀린 토큰")
 		void case3() {
 			// given
-			Member member = SignUpRequest.from(new SignUpRequest("cjyeon1022@gmail.com", "Jaeyeon", "12345678!q2",
-				"12345678!q2"), passwordEncoder.encode("12345678!q2"));
+			Member member = SignUpRequest.from(
+				new SignUpRequest("cjyeon1022@gmail.com", "Jaeyeon", "12345678!q2", "12345678!q2"),
+				passwordEncoder.encode("12345678!q2"));
 			member.generateToken();
 			memberMapper.save(member);
 			String randomToken = UUID.randomUUID().toString();
-			given(memberMapper.findByEmailAndEmailToken(member.getEmail(), randomToken)).willReturn(Optional.of(member));
+			given(memberMapper.findByEmailAndEmailToken(member.getEmail(), randomToken)).willReturn(
+				Optional.of(member));
 
 			// When
 			Exception exception = assertThrows(IllegalArgumentException.class, () -> {

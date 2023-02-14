@@ -10,7 +10,6 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.stereotype.Component;
 
 import com.flab.todo.member.MemberService;
 
@@ -19,8 +18,7 @@ public class SecurityConfig {
 	private final UserDetailsService userDetailsService;
 	private final UnauthorizedEntryPoint unauthorizedEntryPoint;
 
-	public SecurityConfig(UserDetailsService userDetailsService,
-		UnauthorizedEntryPoint unauthorizedEntryPoint) {
+	public SecurityConfig(UserDetailsService userDetailsService, UnauthorizedEntryPoint unauthorizedEntryPoint) {
 		this.userDetailsService = userDetailsService;
 		this.unauthorizedEntryPoint = unauthorizedEntryPoint;
 	}
@@ -42,7 +40,7 @@ public class SecurityConfig {
 	}
 
 	@Bean
-	public PasswordEncoder passwordEncoder(){
+	public PasswordEncoder passwordEncoder() {
 		return new BCryptPasswordEncoder();
 	}
 

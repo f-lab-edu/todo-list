@@ -1,4 +1,4 @@
-package com.flab.todo.common.config.security.user_detail;
+package com.flab.todo.common.config.security.userdetail;
 
 import java.io.Serializable;
 import java.util.ArrayList;

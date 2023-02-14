@@ -37,7 +37,7 @@ public class SignUpRequest {
 			false);
 	}
 
-	public Boolean isValidPassword(){
+	public Boolean isValidPassword() {
 		return this.getPassword().equals(this.getPasswordConfirm());
 	}
 }

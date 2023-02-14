@@ -1,4 +1,4 @@
-package com.flab.todo.common.config.security.user_detail;
+package com.flab.todo.common.config.security.userdetail;
 
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;

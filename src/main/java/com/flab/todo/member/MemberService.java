@@ -65,8 +65,7 @@ public class MemberService {
 	private void sendVerificationEmailWithToken(Member member) {
 		SimpleMailMessage mailMessage = MailMessageMaker.makeVerifyMailFrom(member);
 		javaMailService.send(mailMessage);
-		log.info(
-			"Sent verification email to: " + member.getEmail() + " with link: " + MailMessageMaker.makeEmailVerificationLink(
-				member.getEmailToken(), member.getEmail()));
+		log.info("Sent verification email to: " + member.getEmail() + " with link: "
+			+ MailMessageMaker.makeEmailVerificationLink(member.getEmailToken(), member.getEmail()));
 	}
 }
