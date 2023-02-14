@@ -39,7 +39,6 @@
             emailToken            = #{emailToken},
             joinedAt              = #{joinedAt},
             emailTokenGeneratedAt = #{emailTokenGeneratedAt},
-            tokenExpiration       = #{tokenExpiration},
             isValid               = #{isValid}
         WHERE id = #{id}
     </update>

@@ -14,7 +14,6 @@ CREATE TABLE IF NOT EXISTS member (
     emailToken VARCHAR(255),
     joinedAt TIMESTAMP,
     emailTokenGeneratedAt TIMESTAMP,
-    tokenExpiration TIMESTAMP,
     isValid BOOLEAN,
     PRIMARY KEY (`id`)
 );

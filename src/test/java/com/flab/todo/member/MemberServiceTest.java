@@ -129,11 +129,10 @@ class MemberServiceTest {
 				"12345678!q2"), passwordEncoder.encode("12345678!q2"));
 			member.generateToken();
 			memberMapper.save(member);
-			String token = member.getEmailToken();
-			given(memberMapper.findByEmailAndEmailToken(member.getEmail(), token)).willReturn(member);
+			String randomToken = UUID.randomUUID().toString();
+			given(memberMapper.findByEmailAndEmailToken(member.getEmail(), randomToken)).willReturn(member);
 
 			// When
-			String randomToken = UUID.randomUUID().toString();
 			Exception exception = assertThrows(IllegalArgumentException.class, () -> {
 				memberService.verifyEmailAndComplete(randomToken, member.getEmail());
 			});

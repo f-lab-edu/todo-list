@@ -22,17 +22,15 @@ public class Member {
 	private String emailToken;
 	private LocalDateTime joinedAt;
 	private LocalDateTime emailTokenGeneratedAt;
-	private LocalDateTime tokenExpiration;
 	private boolean isValid;
 
 	public void generateToken() {
 		this.emailToken = UUID.randomUUID().toString();
 		this.emailTokenGeneratedAt = LocalDateTime.now();
-		this.tokenExpiration = emailTokenGeneratedAt.plusMinutes(5);
 	}
 
 	public boolean isValidToken(String token) {
-		return this.emailToken.equals(token) || LocalDateTime.now().isBefore(tokenExpiration);
+		return this.emailToken.equals(token);
 	}
 
 	public void completeSignUp() {
@@ -50,7 +48,6 @@ public class Member {
 			", emailToken='" + emailToken + '\'' +
 			", joinedAt=" + joinedAt +
 			", emailTokenGeneratedAt=" + emailTokenGeneratedAt +
-			", tokenExpiration=" + tokenExpiration +
 			", isValid=" + isValid +
 			'}';
 	}
@@ -65,13 +62,12 @@ public class Member {
 		return isValid == member.isValid && Objects.equals(id, member.id) && Objects.equals(email,
 			member.email) && Objects.equals(name, member.name) && Objects.equals(password,
 			member.password) && Objects.equals(emailToken, member.emailToken) && Objects.equals(
-			joinedAt, member.joinedAt) && Objects.equals(emailTokenGeneratedAt, member.emailTokenGeneratedAt)
-			&& Objects.equals(tokenExpiration, member.tokenExpiration);
+			joinedAt, member.joinedAt) && Objects.equals(emailTokenGeneratedAt, member.emailTokenGeneratedAt);
 	}
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(id, email, name, password, emailToken, joinedAt, emailTokenGeneratedAt, tokenExpiration,
+		return Objects.hash(id, email, name, password, emailToken, joinedAt, emailTokenGeneratedAt,
 			isValid);
 	}
 }

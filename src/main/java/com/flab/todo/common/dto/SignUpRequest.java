@@ -32,6 +32,6 @@ public class SignUpRequest {
 
 	public static Member from(SignUpRequest signupRequest, String encryptedPassword) {
 		return new Member(null, signupRequest.getEmail(), signupRequest.getName(), encryptedPassword,
-			null, null, null, null, false);
+			null, null, null, false);
 	}
 }
