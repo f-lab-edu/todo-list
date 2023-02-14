@@ -50,7 +50,7 @@ class MemberControllerTest {
 
 	@Nested
 	@DisplayName("회원가입")
-	class sendSignUp {
+	class SendSignUpTest {
 		@Test
 		@DisplayName("1. 성공")
 		void success() {
@@ -118,7 +118,7 @@ class MemberControllerTest {
 
 	@Nested
 	@DisplayName("이메일 인증")
-	class checkEmailToken {
+	class CheckEmailTokenTest {
 
 		@Test
 		@DisplayName("1. 인증 성공")

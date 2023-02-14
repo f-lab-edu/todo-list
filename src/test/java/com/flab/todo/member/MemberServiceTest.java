@@ -27,7 +27,7 @@ class MemberServiceTest {
 
 	@Nested
 	@DisplayName("회원가입")
-	class sendSignUp {
+	class SendSignUpTest {
 		@Test
 		@DisplayName("1. 성공 - 이메일 전송")
 		public void case1() {
@@ -80,7 +80,7 @@ class MemberServiceTest {
 
 	@Nested
 	@DisplayName("이메일 검증")
-	class checkEmailToken {
+	class CheckEmailTokenTest {
 
 		@Test
 		@DisplayName("1. 성공")
@@ -119,7 +119,7 @@ class MemberServiceTest {
 			// Then
 			assertTrue(exception.getMessage().equals("Email not found"));
 		}
-		
+
 		@Test
 		@DisplayName("3. 실패 - 틀린 토큰")
 		void case3() {
@@ -143,7 +143,7 @@ class MemberServiceTest {
 
 	@Nested
 	@DisplayName("회원 로그인")
-	class login {
+	class LoginTest {
 		@Test
 		@DisplayName("1. 성공 - 회원 로그인")
 		void case3() throws Exception {
