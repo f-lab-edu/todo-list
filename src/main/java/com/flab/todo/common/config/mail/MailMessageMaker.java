@@ -4,9 +4,10 @@ import org.springframework.mail.SimpleMailMessage;
 
 import com.flab.todo.database.entity.Member;
 
-public class MailMessage extends SimpleMailMessage {
-	public static MailMessage makeVerifyMailFrom(Member member) {
-		MailMessage mailMessage = new MailMessage();
+public class MailMessageMaker {
+
+	public static SimpleMailMessage makeVerifyMailFrom(Member member) {
+		SimpleMailMessage mailMessage = new SimpleMailMessage();
 		mailMessage.setTo(member.getEmail());
 		mailMessage.setSubject("회원 가입 메일 인증 번호");
 		String emailVerificationLink = makeEmailVerificationLink(member.getEmailToken(), member.getEmail());
