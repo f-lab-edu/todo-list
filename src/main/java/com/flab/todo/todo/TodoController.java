@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.flab.todo.common.config.security.UserDetailImpl;
+import com.flab.todo.common.config.security.user_detail.UserDetailImpl;
 import com.flab.todo.common.dto.SaveTodoRequest;
 import com.flab.todo.common.dto.SaveTodoResponse;
 import com.flab.todo.common.dto.TodoListResponse;

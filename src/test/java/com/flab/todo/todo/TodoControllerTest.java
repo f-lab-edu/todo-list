@@ -17,9 +17,9 @@ import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.context.ActiveProfiles;
 
-import com.flab.todo.common.config.security.PasswordEncoder;
 import com.flab.todo.common.dto.SaveTodoRequest;
 import com.flab.todo.common.dto.SaveTodoResponse;
 import com.flab.todo.common.dto.TodoListResponse;
