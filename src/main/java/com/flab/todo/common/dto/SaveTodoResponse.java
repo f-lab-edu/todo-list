@@ -7,7 +7,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Getter
-@NoArgsConstructor(access = AccessLevel.PUBLIC)
+@NoArgsConstructor()
 public class SaveTodoResponse {
 	private Long id;
 	private String things;
@@ -21,10 +21,5 @@ public class SaveTodoResponse {
 
 	public static SaveTodoResponse from(Todo todo) {
 		return new SaveTodoResponse(todo.getId(), todo.getThings(), todo.getIsDone());
-	}
-
-	@Override
-	public String toString() {
-		return "SaveTodoResponse{" + "id=" + id + ", things='" + things + '\'' + ", isDone=" + isDone + '}';
 	}
 }
