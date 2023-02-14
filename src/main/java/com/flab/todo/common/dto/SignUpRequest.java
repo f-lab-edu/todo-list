@@ -23,15 +23,17 @@ public class SignUpRequest {
 	private String name;
 
 	@NotBlank(message = "비밀번호확인 입력은 필수입니다.")
-	@Pattern(regexp = "^(?=.*[A-Za-z])(?=.*\\d)(?=.*[@$!%*#?&])[A-Za-z\\d@$!%*#?&]{8,}$", message = "비밀번호는 최소8자 이상, 문자1개, 숫자1개, 특수문자 1개 포함입니다.")
+	@Pattern(regexp = "^(?=.*[A-Za-z])(?=.*\\d)(?=.*[@$!%*#?&])[A-Za-z\\d@$!%*#?&]{8,}$",
+		message = "비밀번호는 최소8자 이상, 문자1개, 숫자1개, 특수문자 1개 포함입니다.")
 	private String password;
 
 	@NotBlank(message = "비밀번호확인 입력은 필수입니다.")
-	@Pattern(regexp = "^(?=.*[A-Za-z])(?=.*\\d)(?=.*[@$!%*#?&])[A-Za-z\\d@$!%*#?&]{8,}$", message = "비밀번호는 최소8자 이상, 문자1개, 숫자1개, 특수문자 1개 포함입니다.")
+	@Pattern(regexp = "^(?=.*[A-Za-z])(?=.*\\d)(?=.*[@$!%*#?&])[A-Za-z\\d@$!%*#?&]{8,}$",
+		message = "비밀번호는 최소8자 이상, 문자1개, 숫자1개, 특수문자 1개 포함입니다.")
 	private String passwordConfirm;
 
 	public static Member from(SignUpRequest signupRequest, String encryptedPassword) {
-		return new Member(null, signupRequest.getEmail(), signupRequest.getName(), encryptedPassword,
-			null, null, null, false);
+		return new Member(null, signupRequest.getEmail(), signupRequest.getName(), encryptedPassword, null, null, null,
+			false);
 	}
 }

@@ -4,15 +4,15 @@ import java.util.Objects;
 
 import com.flab.todo.database.entity.Todo;
 
+import lombok.AccessLevel;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Getter
+@NoArgsConstructor(access = AccessLevel.PUBLIC)
 public class TodoListResponse {
 	private String value;
 	private Boolean isDone;
-
-	public TodoListResponse() {
-	}
 
 	public TodoListResponse(String value, Boolean isDone) {
 		this.value = value;

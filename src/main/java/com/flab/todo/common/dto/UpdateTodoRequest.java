@@ -20,4 +20,5 @@ public class UpdateTodoRequest {
 	public Todo toModel(Long todoId, Long userId) {
 		return new Todo(todoId, userId, this.things, this.isDone);
 	}
+
 }
