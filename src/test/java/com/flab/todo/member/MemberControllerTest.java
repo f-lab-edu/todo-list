@@ -16,11 +16,11 @@ import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.mail.SimpleMailMessage;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.context.ActiveProfiles;
 
 import com.flab.todo.common.config.mail.JavaMailService;
-import com.flab.todo.common.config.mail.MailMessage;
-import com.flab.todo.common.config.security.PasswordEncoder;
 import com.flab.todo.common.dto.SignUpRequest;
 import com.flab.todo.database.entity.Member;
 
@@ -60,7 +60,7 @@ class MemberControllerTest {
 			HttpEntity<?> requestEntity = new HttpEntity<>(signUpRequest);
 
 			// 실제 메일 보내는 로직 mocking
-			willDoNothing().given(javaMailService).send(new MailMessage());
+			willDoNothing().given(javaMailService).send(new SimpleMailMessage());
 
 			ResponseEntity<Void> response = testRestTemplate
 				.exchange(
@@ -81,7 +81,7 @@ class MemberControllerTest {
 			HttpEntity<?> requestEntity = new HttpEntity<>(signUpRequest);
 
 			// 실제 메일 보내는 로직 mocking
-			willDoNothing().given(javaMailService).send(new MailMessage());
+			willDoNothing().given(javaMailService).send(new SimpleMailMessage());
 
 			ResponseEntity<Void> response = testRestTemplate
 				.exchange(
@@ -102,7 +102,7 @@ class MemberControllerTest {
 			HttpEntity<?> requestEntity = new HttpEntity<>(signUpRequest);
 
 			// 실제 메일 보내는 로직 mocking
-			willDoNothing().given(javaMailService).send(new MailMessage());
+			willDoNothing().given(javaMailService).send(new SimpleMailMessage());
 
 			ResponseEntity<Void> response = testRestTemplate
 				.exchange(

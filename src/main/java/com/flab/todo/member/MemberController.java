@@ -22,13 +22,13 @@ public class MemberController {
 
 	@PostMapping("/sign-up")
 	public ResponseEntity<Void> sendEmail(@RequestBody @Valid SignUpRequest sendEmail) {
-		memberService.sendSignUpEmail(sendEmail);
+		memberService.requestVerificationToken(sendEmail);
 		return ResponseEntity.status(HttpStatus.CREATED).build();
 	}
 
 	@GetMapping("/check-email-token")
 	public ResponseEntity<Void> verifyEmail(@RequestParam String token, @RequestParam String email) {
-		memberService.verifyEmailAndComplete(token, email);
+		memberService.completeSignUp(token, email);
 		return new ResponseEntity<>(HttpStatus.OK);
 	}
 }
