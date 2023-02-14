@@ -9,16 +9,14 @@ import lombok.Getter;
 public class ErrorResponse {
 	private int status;
 	private String message;
-	private String error;
 
-	public ErrorResponse(int status, String message, String error) {
+	public ErrorResponse(int status, String message) {
 		this.status = status;
 		this.message = message;
-		this.error = error;
 	}
 
 	public static ResponseEntity from(HttpStatus httpStatus, Exception ex) {
-		ErrorResponse errorResponse = new ErrorResponse(httpStatus.value(), httpStatus.name(), ex.getMessage());
+		ErrorResponse errorResponse = new ErrorResponse(httpStatus.value(), ex.getMessage());
 
 		return ResponseEntity
 			.status(HttpStatus.BAD_REQUEST)
@@ -26,7 +24,7 @@ public class ErrorResponse {
 	}
 
 	public static ResponseEntity from(HttpStatus httpStatus, String message) {
-		ErrorResponse errorResponse = new ErrorResponse(httpStatus.value(), httpStatus.name(), message);
+		ErrorResponse errorResponse = new ErrorResponse(httpStatus.value(), message);
 
 		return ResponseEntity
 			.status(HttpStatus.BAD_REQUEST)
