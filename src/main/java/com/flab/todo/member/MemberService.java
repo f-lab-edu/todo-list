@@ -1,15 +1,12 @@
 package com.flab.todo.member;
 
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.mail.SimpleMailMessage;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.flab.todo.common.config.mail.JavaMailService;
-import com.flab.todo.common.config.mail.MailMessage;
-import com.flab.todo.common.config.security.UserDetailImpl;
+import com.flab.todo.common.config.mail.MailMessageMaker;
 import com.flab.todo.common.dto.SignUpRequest;
-import com.flab.todo.common.exception.custom.UnAuthorizedException;
 import com.flab.todo.database.entity.Member;
 
 import lombok.RequiredArgsConstructor;
@@ -18,23 +15,18 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class MemberService implements UserDetailsService {
+public class MemberService {
 
 	private final PasswordEncoder passwordEncoder;
 	private final MemberMapper memberMapper;
 	private final JavaMailService javaMailService;
 
-	public void verifyEmailAndComplete(String token, String email) {
-		Member member = memberMapper.findByEmailAndEmailToken(email, token);
-		validateIsExistEmail(member);
+	public void completeSignUp(String token, String email) {
+		Member member = memberMapper.findByEmailAndEmailToken(email, token)
+			.orElseThrow(() -> new IllegalArgumentException("Email not found"));
 		validateIsValidToken(member, token);
-		completeSignUp(member);
-	}
-
-	private void validateIsExistEmail(Member member) {
-		if (member == null) {
-			throw new IllegalArgumentException("Email not found");
-		}
+		member.completeSignUp();
+		memberMapper.update(member);
 	}
 
 	private void validateIsValidToken(Member member, String token) {
@@ -43,12 +35,7 @@ public class MemberService implements UserDetailsService {
 		}
 	}
 
-	private void completeSignUp(Member member) {
-		member.completeSignUp();
-		memberMapper.update(member);
-	}
-
-	public void sendSignUpEmail(SignUpRequest signUpRequest) {
+	public void requestVerificationToken(SignUpRequest signUpRequest) {
 
 		validateDuplicateUser(signUpRequest);
 		validatePassword(signUpRequest);
@@ -70,22 +57,16 @@ public class MemberService implements UserDetailsService {
 	}
 
 	private void validatePassword(SignUpRequest signUpRequest) {
-		if (!signUpRequest.getPassword().equals(signUpRequest.getPasswordConfirm())) {
+		if (!signUpRequest.isValidPassword()) {
 			throw new IllegalArgumentException("비밀번호가 서로 일치하지 않습니다.");
 		}
 	}
 
 	private void sendVerificationEmailWithToken(Member member) {
-		MailMessage mailMessage = MailMessage.makeVerifyMailFrom(member);
+		SimpleMailMessage mailMessage = MailMessageMaker.makeVerifyMailFrom(member);
 		javaMailService.send(mailMessage);
 		log.info(
-			"Sent verification email to: " + member.getEmail() + " with link: " + MailMessage.makeEmailVerificationLink(
+			"Sent verification email to: " + member.getEmail() + " with link: " + MailMessageMaker.makeEmailVerificationLink(
 				member.getEmailToken(), member.getEmail()));
-	}
-
-	@Override
-	public UserDetails loadUserByUsername(String username) {
-		Member findMember = memberMapper.findByEmail(username).orElseThrow(UnAuthorizedException::new);
-		return new UserDetailImpl(findMember);
 	}
 }

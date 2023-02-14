@@ -12,15 +12,16 @@ import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentMatchers;
 import org.mockito.Mockito;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import com.flab.todo.common.config.mail.JavaMailService;
-import com.flab.todo.common.config.security.PasswordEncoder;
 import com.flab.todo.common.dto.SignUpRequest;
 import com.flab.todo.common.exception.custom.UnAuthorizedException;
 import com.flab.todo.database.entity.Member;
 
 class MemberServiceTest {
-	private PasswordEncoder passwordEncoder = new PasswordEncoder();
+	private PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 	private MemberMapper memberMapper = Mockito.mock(MemberMapper.class);
 	private JavaMailService javaMailService = Mockito.mock(JavaMailService.class);
 	private MemberService memberService = new MemberService(passwordEncoder, memberMapper, javaMailService);
@@ -37,7 +38,7 @@ class MemberServiceTest {
 			given(memberMapper.existsByEmail("cjyeon1022@gmail.com")).willReturn(false);
 
 			// When
-			memberService.sendSignUpEmail(signUpRequest);
+			memberService.requestVerificationToken(signUpRequest);
 
 			// Then
 			verify(memberMapper, times(1)).save(ArgumentMatchers.any(Member.class));
@@ -53,7 +54,7 @@ class MemberServiceTest {
 
 			// When
 			Exception exception = assertThrows(IllegalArgumentException.class, () -> {
-				memberService.sendSignUpEmail(signUpRequest);
+				memberService.requestVerificationToken(signUpRequest);
 			});
 
 			// Then
@@ -70,7 +71,7 @@ class MemberServiceTest {
 
 			// When
 			Exception exception = assertThrows(IllegalArgumentException.class, () -> {
-				memberService.sendSignUpEmail(signUpRequest);
+				memberService.requestVerificationToken(signUpRequest);
 			});
 
 			// Then
@@ -91,10 +92,10 @@ class MemberServiceTest {
 			member.generateToken();
 			memberMapper.save(member);
 			String token = member.getEmailToken();
-			given(memberMapper.findByEmailAndEmailToken(member.getEmail(), token)).willReturn(member);
+			given(memberMapper.findByEmailAndEmailToken(member.getEmail(), token)).willReturn(Optional.of(member));
 
 			// when
-			memberService.verifyEmailAndComplete(token, member.getEmail());
+			memberService.completeSignUp(token, member.getEmail());
 
 			// then
 			verify(memberMapper, times(1)).update(ArgumentMatchers.any(Member.class));
@@ -109,11 +110,11 @@ class MemberServiceTest {
 			member.generateToken();
 			memberMapper.save(member);
 			String token = member.getEmailToken();
-			given(memberMapper.findByEmailAndEmailToken(member.getEmail(), token)).willReturn(null);
+			given(memberMapper.findByEmailAndEmailToken(member.getEmail(), token)).willReturn(Optional.empty());
 
 			// When
 			Exception exception = assertThrows(IllegalArgumentException.class, () -> {
-				memberService.verifyEmailAndComplete(token, member.getEmail());
+				memberService.completeSignUp(token, member.getEmail());
 			});
 
 			// Then
@@ -129,51 +130,15 @@ class MemberServiceTest {
 			member.generateToken();
 			memberMapper.save(member);
 			String randomToken = UUID.randomUUID().toString();
-			given(memberMapper.findByEmailAndEmailToken(member.getEmail(), randomToken)).willReturn(member);
+			given(memberMapper.findByEmailAndEmailToken(member.getEmail(), randomToken)).willReturn(Optional.of(member));
 
 			// When
 			Exception exception = assertThrows(IllegalArgumentException.class, () -> {
-				memberService.verifyEmailAndComplete(randomToken, member.getEmail());
+				memberService.completeSignUp(randomToken, member.getEmail());
 			});
 
 			// Then
 			assertEquals("Wrong Token", exception.getMessage());
 		}
-	}
-
-	@Nested
-	@DisplayName("회원 로그인")
-	class LoginTest {
-		@Test
-		@DisplayName("1. 성공 - 회원 로그인")
-		void case3() throws Exception {
-			// given
-			Member member = SignUpRequest.from(new SignUpRequest("cjyeon1022@gmail.com", "Jaeyeon", "12345678!q2",
-				"12345678!q2"), passwordEncoder.encode("12345678!q2"));
-			given(memberMapper.findByEmail(member.getEmail())).willReturn(Optional.of(member));
-
-			// when
-			UserDetails userDetails = memberService.loadUserByUsername(member.getEmail());
-
-			// then
-			assertEquals(member.getEmail(), userDetails.getUsername());
-		}
-	}
-
-	@Test
-	@DisplayName("2. 실패 - 회원 정보 불일치(이메일)")
-	void case4() throws Exception {
-		// given
-		Member member = SignUpRequest.from(new SignUpRequest("cjyeon1022@gmail.com", "Jaeyeon", "12345678!q2",
-			"12345678!q2"), passwordEncoder.encode("12345678!q2"));
-		given(memberMapper.findByEmail(member.getEmail())).willReturn(Optional.empty());
-
-		// When
-		Exception exception = assertThrows(UnAuthorizedException.class, () -> {
-			memberService.loadUserByUsername(member.getEmail());
-		});
-
-		// Then
-		assertTrue(exception.getMessage().equals("Unauthorized Request"));
 	}
 }
