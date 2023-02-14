@@ -119,8 +119,7 @@ class MemberServiceTest {
 			// Then
 			assertTrue(exception.getMessage().equals("Email not found"));
 		}
-
-		// TODO ERROR
+		
 		@Test
 		@DisplayName("3. 실패 - 틀린 토큰")
 		void case3() {
@@ -151,8 +150,6 @@ class MemberServiceTest {
 			// given
 			Member member = SignUpRequest.from(new SignUpRequest("cjyeon1022@gmail.com", "Jaeyeon", "12345678!q2",
 				"12345678!q2"), passwordEncoder.encode("12345678!q2"));
-			member.generateToken();
-			memberMapper.save(member);
 			given(memberMapper.findByEmail(member.getEmail())).willReturn(Optional.of(member));
 
 			// when
@@ -169,8 +166,6 @@ class MemberServiceTest {
 		// given
 		Member member = SignUpRequest.from(new SignUpRequest("cjyeon1022@gmail.com", "Jaeyeon", "12345678!q2",
 			"12345678!q2"), passwordEncoder.encode("12345678!q2"));
-		member.generateToken();
-		memberMapper.save(member);
 		given(memberMapper.findByEmail(member.getEmail())).willReturn(Optional.empty());
 
 		// When
