@@ -15,11 +15,10 @@ import org.springframework.stereotype.Component;
 public class UnauthorizedEntryPoint implements AuthenticationEntryPoint {
 
 	@Override
-	public void commence(HttpServletRequest httpServletRequest,
-		HttpServletResponse httpServletResponse,
-		AuthenticationException e) throws IOException, ServletException {
+	public void commence(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse,
+		AuthenticationException ex) throws IOException, ServletException {
 		httpServletResponse.setContentType("application/json;charset=UTF-8");
 		httpServletResponse.setStatus(HttpStatus.UNAUTHORIZED.value());
-		httpServletResponse.getWriter().print(e.getLocalizedMessage());
+		httpServletResponse.getWriter().print(ex.getLocalizedMessage());
 	}
 }

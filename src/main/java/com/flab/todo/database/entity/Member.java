@@ -40,25 +40,20 @@ public class Member {
 
 	@Override
 	public String toString() {
-		return "Member{" +
-			"id=" + id +
-			", email='" + email + '\'' +
-			", name='" + name + '\'' +
-			", password='" + password + '\'' +
-			", emailToken='" + emailToken + '\'' +
-			", joinedAt=" + joinedAt +
-			", emailTokenGeneratedAt=" + emailTokenGeneratedAt +
-			", isValid=" + isValid +
-			'}';
+		return "Member{" + "id=" + id + ", email='" + email + '\'' + ", name='" + name + '\'' + ", password='"
+			+ password + '\'' + ", emailToken='" + emailToken + '\'' + ", joinedAt=" + joinedAt
+			+ ", emailTokenGeneratedAt=" + emailTokenGeneratedAt + ", isValid=" + isValid + '}';
 	}
 
 	@Override
-	public boolean equals(Object o) {
-		if (this == o)
+	public boolean equals(Object object) {
+		if (this == object) {
 			return true;
-		if (o == null || getClass() != o.getClass())
+		}
+		if (object == null || getClass() != object.getClass()) {
 			return false;
-		Member member = (Member)o;
+		}
+		Member member = (Member)object;
 		return isValid == member.isValid && Objects.equals(id, member.id) && Objects.equals(email,
 			member.email) && Objects.equals(name, member.name) && Objects.equals(password,
 			member.password) && Objects.equals(emailToken, member.emailToken) && Objects.equals(

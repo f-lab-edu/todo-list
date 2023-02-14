@@ -19,21 +19,18 @@ public class Todo {
 
 	@Override
 	public String toString() {
-		return "Todo{" +
-			"id=" + id +
-			", userId=" + userId +
-			", things='" + things + '\'' +
-			", isDone=" + isDone +
-			'}';
+		return "Todo{" + "id=" + id + ", userId=" + userId + ", things='" + things + '\'' + ", isDone=" + isDone + '}';
 	}
 
 	@Override
-	public boolean equals(Object o) {
-		if (this == o)
+	public boolean equals(Object object) {
+		if (this == object) {
 			return true;
-		if (o == null || getClass() != o.getClass())
+		}
+		if (object == null || getClass() != object.getClass()) {
 			return false;
-		Todo todo = (Todo)o;
+		}
+		Todo todo = (Todo)object;
 		return Objects.equals(id, todo.id) && Objects.equals(userId, todo.userId)
 			&& Objects.equals(things, todo.things) && Objects.equals(isDone, todo.isDone);
 	}

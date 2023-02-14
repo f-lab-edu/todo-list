@@ -20,7 +20,7 @@ public class UserDetailImpl implements UserDetails, Serializable {
 		return member;
 	}
 
-	public Long getUserId(){
+	public Long getUserId() {
 		return member.getId();
 	}
 
@@ -62,8 +62,6 @@ public class UserDetailImpl implements UserDetails, Serializable {
 
 	@Override
 	public String toString() {
-		return "UserDetailImpl{" +
-			"member=" + member +
-			'}';
+		return "UserDetailImpl{" + "member=" + member + '}';
 	}
 }

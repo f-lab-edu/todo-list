@@ -3,15 +3,14 @@ package com.flab.todo.todo;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import org.springframework.stereotype.Service;
+
+import com.flab.todo.common.dto.SaveTodoRequest;
 import com.flab.todo.common.dto.SaveTodoResponse;
+import com.flab.todo.common.dto.TodoListResponse;
 import com.flab.todo.common.dto.UpdateTodoRequest;
 import com.flab.todo.common.dto.UpdateTodoResponse;
 import com.flab.todo.database.entity.Todo;
-
-import org.springframework.stereotype.Service;
-
-import com.flab.todo.common.dto.TodoListResponse;
-import com.flab.todo.common.dto.SaveTodoRequest;
 
 @Service
 public class TodoService {
@@ -33,7 +32,6 @@ public class TodoService {
 		this.todoMapper.save(todo);
 		return SaveTodoResponse.from(todo);
 	}
-
 
 	public UpdateTodoResponse update(UpdateTodoRequest updateTodoRequest, Long todoId, Long userId) {
 		Todo todo = updateTodoRequest.toModel(todoId, userId);
