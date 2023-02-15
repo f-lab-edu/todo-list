@@ -11,18 +11,18 @@ import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentMatchers;
 import org.mockito.Mockito;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
-import com.flab.todo.common.config.mail.JavaMailService;
 import com.flab.todo.common.dto.SignUpRequest;
 import com.flab.todo.database.entity.Member;
 
 class MemberServiceTest {
 	private PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 	private MemberMapper memberMapper = Mockito.mock(MemberMapper.class);
-	private JavaMailService javaMailService = Mockito.mock(JavaMailService.class);
-	private MemberService memberService = new MemberService(passwordEncoder, memberMapper, javaMailService);
+	private ApplicationEventPublisher eventPublisher = Mockito.mock(ApplicationEventPublisher.class);
+	private MemberService memberService = new MemberService(passwordEncoder, memberMapper, eventPublisher);
 
 	@Nested
 	@DisplayName("회원가입")

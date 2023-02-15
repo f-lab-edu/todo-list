@@ -1,12 +1,11 @@
 package com.flab.todo.member;
 
-import org.springframework.mail.SimpleMailMessage;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import com.flab.todo.common.config.mail.JavaMailService;
-import com.flab.todo.common.config.mail.MailMessageMaker;
 import com.flab.todo.common.dto.SignUpRequest;
+import com.flab.todo.common.event.VerificationEmailEvent;
 import com.flab.todo.database.entity.Member;
 
 import lombok.RequiredArgsConstructor;
@@ -19,7 +18,7 @@ public class MemberService {
 
 	private final PasswordEncoder passwordEncoder;
 	private final MemberMapper memberMapper;
-	private final JavaMailService javaMailService;
+	private final ApplicationEventPublisher eventPublisher;
 
 	public void completeSignUp(String token, String email) {
 		Member member = memberMapper.findByEmailAndEmailToken(email, token)
@@ -63,9 +62,6 @@ public class MemberService {
 	}
 
 	private void sendVerificationEmailWithToken(Member member) {
-		SimpleMailMessage mailMessage = MailMessageMaker.makeVerifyMailFrom(member);
-		javaMailService.send(mailMessage);
-		log.info("Sent verification email to: " + member.getEmail() + " with link: "
-			+ MailMessageMaker.makeEmailVerificationLink(member.getEmailToken(), member.getEmail()));
+		eventPublisher.publishEvent(new VerificationEmailEvent(this, member));
 	}
 }
