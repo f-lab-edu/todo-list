@@ -6,7 +6,6 @@ import org.springframework.stereotype.Component;
 
 import com.flab.todo.common.config.mail.JavaMailService;
 import com.flab.todo.common.config.mail.MailMessageMaker;
-import com.flab.todo.database.entity.Member;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -20,10 +19,9 @@ public class VerificationEmailListener {
 
 	@EventListener
 	public void handleVerificationEmailEvent(VerificationEmailEvent event) {
-		Member member = event.getMember();
-		SimpleMailMessage mailMessage = MailMessageMaker.makeVerifyMailFrom(member);
+		SimpleMailMessage mailMessage = event.getMailMessage();
 		javaMailService.send(mailMessage);
-		log.info("Sent verification email to: " + member.getEmail() + " with link: "
-			+ MailMessageMaker.makeEmailVerificationLink(member.getEmailToken(), member.getEmail()));
+		log.info("Sent verification email to: " + mailMessage.getTo()[0] + " with link: "
+			+ MailMessageMaker.makeEmailVerificationLink(mailMessage.getText(), mailMessage.getTo()[0]));
 	}
 }

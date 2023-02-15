@@ -1,18 +1,15 @@
 package com.flab.todo.common.event;
 
-import org.springframework.context.ApplicationEvent;
-
-import com.flab.todo.database.entity.Member;
+import org.springframework.mail.SimpleMailMessage;
 
 import lombok.Getter;
 
 @Getter
-public class VerificationEmailEvent extends ApplicationEvent {
+public class VerificationEmailEvent {
 
-	private final Member member;
+	private final SimpleMailMessage mailMessage;
 
-	public VerificationEmailEvent(Object source, Member member) {
-		super(source);
-		this.member = member;
+	public VerificationEmailEvent(SimpleMailMessage mailMessage) {
+		this.mailMessage = mailMessage;
 	}
 }

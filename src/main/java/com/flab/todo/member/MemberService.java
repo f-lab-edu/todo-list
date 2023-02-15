@@ -1,9 +1,11 @@
 package com.flab.todo.member;
 
 import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.mail.SimpleMailMessage;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import com.flab.todo.common.config.mail.MailMessageMaker;
 import com.flab.todo.common.dto.SignUpRequest;
 import com.flab.todo.common.event.VerificationEmailEvent;
 import com.flab.todo.database.entity.Member;
@@ -62,6 +64,8 @@ public class MemberService {
 	}
 
 	private void sendVerificationEmailWithToken(Member member) {
-		eventPublisher.publishEvent(new VerificationEmailEvent(this, member));
+		SimpleMailMessage mailMessage = MailMessageMaker.makeVerifyMailFrom(member);
+		VerificationEmailEvent event = new VerificationEmailEvent(mailMessage);
+		eventPublisher.publishEvent(event);
 	}
 }
