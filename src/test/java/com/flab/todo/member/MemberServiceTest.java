@@ -16,6 +16,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import com.flab.todo.common.dto.SignUpRequest;
+import com.flab.todo.common.event.VerificationEmailEvent;
 import com.flab.todo.database.entity.Member;
 
 class MemberServiceTest {
@@ -141,5 +142,21 @@ class MemberServiceTest {
 			// Then
 			assertEquals("Wrong Token", exception.getMessage());
 		}
+	}
+
+	@Test
+	@DisplayName("EventPublisher가 publish를 호출했는지 테스트")
+	void sendVerificationEmailWithToken() throws Exception {
+		// Given
+		SignUpRequest signUpRequest = new SignUpRequest("cjyeon1022@gmail.com", "Jaeyeon", "12345678!q2",
+			"12345678!q2");
+		given(memberMapper.existsByEmail("cjyeon1022@gmail.com")).willReturn(false);
+
+		// When
+		memberService.requestVerificationToken(signUpRequest);
+
+		// Then
+		verify(memberMapper, times(1)).save(ArgumentMatchers.any(Member.class));
+		verify(eventPublisher, times(1)).publishEvent(ArgumentMatchers.any(VerificationEmailEvent.class));
 	}
 }
