@@ -10,7 +10,7 @@ on:
   pull_request:
     branches: [ "main", "dev" ]
     paths:
-      - 'todo-list/src/**'
+      - 'src/**'
 
 jobs:
   checkstyle:
@@ -27,11 +27,11 @@ jobs:
         with:
           checkstyle_config: ${{ github.workspace }}/config/checkstyle/naver-checkstyle-rules.xml
           github_token: ${{ secrets.github_token }}
-          reporter: github-pr-review
+          reporter: github-check
           level: warning
 
   build:
-    permissions: read
+    permissions: write-all
 
     runs-on: ubuntu-latest
 

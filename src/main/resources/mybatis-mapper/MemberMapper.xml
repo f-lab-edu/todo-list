@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.flab.todo.member.MemberMapper">
+
+    <insert id="save" useGeneratedKeys="true" keyProperty="id">
+        insert into member (email, name, password, emailToken, isValid)
+        values (#{email}, #{name}, #{password}, #{emailToken}, #{isValid})
+        <selectKey keyProperty="id" resultType="Long" order="AFTER">
+            select MAX(id)+1 FROM member
+        </selectKey>
+    </insert>
+
+    <select id="findByEmail" resultType="Member">
+        SELECT *
+        FROM member
+        WHERE email = #{email}
+    </select>
+
+    <select id="existsByEmail" resultType="boolean">
+        select COUNT(1) > 0
+        FROM member
+        WHERE email = #{email}
+    </select>
+
+
+    <select id="findByEmailAndEmailToken" resultType="com.flab.todo.database.entity.Member">
+        select *
+        from member
+        where email = #{email}
+          AND emailToken = #{emailToken}
+    </select>
+
+    <update id="update" parameterType="Member">
+        UPDATE member
+        SET email                 = #{email},
+            name                  = #{name},
+            password              = #{password},
+            emailToken            = #{emailToken},
+            joinedAt              = #{joinedAt},
+            emailTokenGeneratedAt = #{emailTokenGeneratedAt},
+            isValid               = #{isValid}
+        WHERE id = #{id}
+    </update>
+
+    <delete id="deleteAll">
+        DELETE
+        FROM member
+    </delete>
+</mapper>

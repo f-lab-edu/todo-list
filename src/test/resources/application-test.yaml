@@ -1,4 +1,3 @@
-# mybatis 관련 설정
 mybatis:
   configuration:
     map-underscore-to-camel-case: true
@@ -16,16 +15,3 @@ spring:
     url: jdbc:h2:mem:testdb;MODE=MySQL;
     driverClassName: org.h2.Driver
     password: ''
-
-  # email 관련 (Gmail)
-  mail:
-    host: smtp.gmail.com
-    port: 587
-    username: ${MAIL_ID}
-    password: ${MAIL_PASSWORD}
-    properties:
-      mail:
-        smtp:
-          auth: true
-          starttls:
-            enable: true

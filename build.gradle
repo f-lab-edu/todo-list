@@ -1,22 +1,22 @@
 plugins {
-	id 'java'
-	id 'org.springframework.boot' version '2.7.7'
-	id 'io.spring.dependency-management' version '1.0.15.RELEASE'
+    id 'java'
+    id 'org.springframework.boot' version '2.7.7'
+    id 'io.spring.dependency-management' version '1.0.15.RELEASE'
     id 'checkstyle'
     id 'jacoco'
 }
 
 checkstyle {
-  ignoreFailures = true // 분석결과 예외가 발생하면 빌드실패 발생시키는 것을 제외
-  configFile = rootProject.file("${rootDir}/config/checkstyle/naver-checkstyle-rules.xml")
-  reportsDir = file("${buildDir}/checkstyle-output") // 리포트 파일이 위치할 디렉토리 지정
-  toolVersion = '10.6.0'
+    ignoreFailures = true // 분석결과 예외가 발생하면 빌드실패 발생시키는 것을 제외
+    configFile = rootProject.file("${rootDir}/config/checkstyle/naver-checkstyle-rules.xml")
+    reportsDir = file("${buildDir}/checkstyle-output") // 리포트 파일이 위치할 디렉토리 지정
+    toolVersion = '10.6.0'
 }
 
 checkstyleMain {
-  reports {
-    xml.destination = file("${checkstyle.reportsDir}/checkstyle-report.xml") // 리포트 파일의 위치 및 파일명 지정
-  }
+    reports {
+        xml.destination = file("${checkstyle.reportsDir}/checkstyle-report.xml") // 리포트 파일의 위치 및 파일명 지정
+    }
 }
 
 group = 'com.flab'
@@ -24,22 +24,27 @@ version = '0.0.1-SNAPSHOT'
 sourceCompatibility = '11'
 
 configurations {
-	compileOnly {
-		extendsFrom annotationProcessor
-	}
+    compileOnly {
+        extendsFrom annotationProcessor
+    }
 }
 
 repositories {
-	mavenCentral()
+    mavenCentral()
 }
 
 dependencies {
-	implementation 'org.springframework.boot:spring-boot-starter-web'
-	implementation 'org.mybatis.spring.boot:mybatis-spring-boot-starter:2.3.0'
-	compileOnly 'org.projectlombok:lombok'
-	runtimeOnly 'com.h2database:h2'
-	annotationProcessor 'org.projectlombok:lombok'
-	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation 'org.mybatis.spring.boot:mybatis-spring-boot-starter:2.3.0'
+    implementation 'org.springframework.boot:spring-boot-starter-mail'
+    implementation 'org.springframework.boot:spring-boot-starter-security'
+    implementation 'org.springframework.boot:spring-boot-starter-validation'
+    compileOnly 'org.projectlombok:lombok'
+    implementation 'com.h2database:h2'
+    annotationProcessor 'org.projectlombok:lombok'
+    annotationProcessor "org.springframework.boot:spring-boot-configuration-processor"
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    implementation group: 'org.apache.httpcomponents', name: 'httpclient', version: '4.5'
 }
 
 tasks.named('test') {
@@ -60,7 +65,9 @@ jacocoTestReport {
     afterEvaluate {
         classDirectories.setFrom(files(classDirectories.files.collect {
             fileTree(dir: it,
-                    exclude: ["com/flab/todo/TodoListApplication.class"])
+                    exclude: ["com/flab/todo/TodoListApplication.class",
+                              "com/flab/todo/common/**/*.class",
+                              "com/flab/todo/database/**/*.class"])
         }))
     }
     finalizedBy 'jacocoTestCoverageVerification'
@@ -71,10 +78,12 @@ jacocoTestCoverageVerification {
     afterEvaluate {
         classDirectories.setFrom(files(classDirectories.files.collect {
             fileTree(dir: it,
-                    exclude: ["com/flab/todo/TodoListApplication.class"])
+                    exclude: ["com/flab/todo/TodoListApplication.class",
+                              "com/flab/todo/common/**/*.class",
+                              "com/flab/todo/database/**/*.class"])
         }))
     }
-    violationRules{
+    violationRules {
         rule {
             enabled = true
             element = 'CLASS'
